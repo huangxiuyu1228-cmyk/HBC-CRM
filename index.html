@@ -27,11 +27,12 @@
                         sans: ['"Noto Sans SC"', 'sans-serif'],
                     },
                     animation: {
-                        'fade-in': 'fadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards', /* 调慢动画 */
+                        'fade-in': 'fadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
                         'pop-in': 'popIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'slide-in-right': 'slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards', /* 调慢动画 */
-                        'blob': 'blob 15s infinite',
+                        'slide-in-right': 'slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'blob': 'blob 20s infinite alternate',
                         'liquid': 'liquid 8s ease-in-out infinite',
+                        'gradient-x': 'gradientX 15s ease infinite',
                     },
                     keyframes: {
                         fadeIn: {
@@ -48,13 +49,17 @@
                         },
                         blob: {
                             '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(50px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-30px, 30px) scale(0.9)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
                             '100%': { transform: 'translate(0px, 0px) scale(1)' },
                         },
                         liquid: {
                             '0%, 100%': { borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' },
                             '50%': { borderRadius: '30% 60% 70% 40% / 50% 60% 30% 60%' },
+                        },
+                        gradientX: {
+                            '0%, 100%': { 'background-position': '0% 50%' },
+                            '50%': { 'background-position': '100% 50%' },
                         }
                     }
                 }
@@ -64,68 +69,53 @@
     <style>
         body {
             font-family: 'Noto Sans SC', sans-serif;
-            background-color: #ECFDF5; 
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
-            transition: all 0.3s ease;
-        }
-
-        /* 模拟移动端容器样式 */
-        body.mobile-mode {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #333;
-            height: 100vh;
-            padding: 20px;
-        }
-        
-        body.mobile-mode #app-wrapper {
-            width: 375px;
-            height: 812px; /* iPhone X height */
-            background-color: #ECFDF5;
-            border-radius: 40px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 0 0 10px #000, 0 0 50px rgba(0,0,0,0.5);
-        }
-
-        /* 普通模式下 wrapper 占满全屏 */
-        #app-wrapper {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            overflow: hidden;
+            /* 动态渐变背景作为底色 */
+            background: linear-gradient(-45deg, #ecfdf5, #d1fae5, #eff6ff, #dbeafe);
+            background-size: 400% 400%;
+            animation: gradientX 15s ease infinite;
         }
 
         /* 隐藏滚动条 */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* --- 旗舰级液态玻璃样式 --- */
+        /* --- 3D 胶囊液态玻璃 (升级版) --- */
         .liquid-glass {
-            background: rgba(255, 255, 255, 0.4); 
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            /* 基础材质 */
+            background: rgba(255, 255, 255, 0.45); 
+            backdrop-filter: blur(30px) saturate(120%);
+            -webkit-backdrop-filter: blur(30px) saturate(120%);
+            
+            /* 胶囊圆角 */
+            border-radius: 2rem;
+            
+            /* 3D 边框光照模拟 */
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-top: 1.5px solid rgba(255, 255, 255, 0.8);
             border-left: 1.5px solid rgba(255, 255, 255, 0.8);
-            border-right: 1px solid rgba(255, 255, 255, 0.3);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            
+            /* 复合阴影制造厚度感 */
             box-shadow: 
-                0 20px 40px -10px rgba(0, 0, 0, 0.05), 
-                inset 0 0 0 1px rgba(255, 255, 255, 0.2), 
-                inset 0 0 20px 5px rgba(255, 255, 255, 0.3); 
+                0 25px 45px rgba(0, 0, 0, 0.05), /* 外部投影 */
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2), /* 细微内描边 */
+                inset 2px 2px 20px rgba(255, 255, 255, 0.5), /* 左上高光 */
+                inset -2px -2px 20px rgba(0, 0, 0, 0.02); /* 右下暗部 */
+            
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         
         .liquid-glass-dark {
-             background: rgba(255, 255, 255, 0.75);
-             backdrop-filter: blur(50px);
-             -webkit-backdrop-filter: blur(50px);
-             border: 1px solid rgba(255, 255, 255, 0.6);
-             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+             background: rgba(255, 255, 255, 0.7);
+             backdrop-filter: blur(40px) saturate(150%);
+             -webkit-backdrop-filter: blur(40px) saturate(150%);
+             border: 1px solid rgba(255, 255, 255, 0.5);
+             border-top: 1px solid rgba(255, 255, 255, 0.9);
+             box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.1), inset 0 0 20px rgba(255, 255, 255, 0.8);
         }
 
-        /* 列表项飞入动画延迟 (调慢间距) */
+        /* 列表项飞入动画延迟 */
         .stagger-1 { animation-delay: 0.1s; }
         .stagger-2 { animation-delay: 0.2s; }
         .stagger-3 { animation-delay: 0.3s; }
@@ -139,196 +129,181 @@
         .video-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(5px); z-index: 1;
+            backdrop-filter: blur(8px); z-index: 1; /* 增加一点模糊，让背景更柔和 */
         }
 
-        .hover-glass { transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        /* 悬停微动效 - 3D 浮起 */
         .hover-glass:hover { 
-            transform: translateY(-4px) scale(1.01); 
-            box-shadow: 0 20px 40px -5px rgba(16, 185, 129, 0.15), inset 0 0 30px rgba(255, 255, 255, 0.8);
-            border-color: #fff;
+            transform: translateY(-6px) scale(1.01); 
+            box-shadow: 
+                0 30px 50px -10px rgba(16, 185, 129, 0.15), 
+                inset 0 0 30px rgba(255, 255, 255, 0.9);
+            border-color: rgba(255, 255, 255, 1);
+            z-index: 10;
         }
-
-        /* 切换按钮样式 */
-        #mode-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 9999;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: transform 0.3s;
+        
+        /* 移动端特定优化 */
+        @media (max-width: 768px) {
+            .liquid-glass {
+                border-radius: 1.5rem; /* 移动端稍小的圆角适应屏幕 */
+                backdrop-filter: blur(35px) saturate(130%); /* 移动端增强模糊 */
+            }
         }
-        #mode-toggle:hover { transform: scale(1.1); }
     </style>
 </head>
 <body class="text-gray-700 h-screen w-screen overflow-hidden relative selection:bg-green-200 selection:text-green-900">
 
-    <!-- 模式切换按钮 -->
-    <div id="mode-toggle" onclick="toggleMobileMode()" title="切换 PC / 移动端视图">
-        <i class="fa-solid fa-mobile-screen-button text-xl"></i>
+    <!-- 高级动态流体背景 -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <!-- 基础渐变层 (已在 body 中定义) -->
+        
+        <!-- 动态光斑 (增强色彩以穿透磨砂玻璃) -->
+        <div class="absolute top-[-10%] left-[-10%] w-[900px] h-[900px] bg-emerald-400/30 rounded-full mix-blend-multiply filter blur-[120px] animate-blob"></div>
+        <div class="absolute top-[20%] right-[-20%] w-[700px] h-[700px] bg-blue-400/30 rounded-full mix-blend-multiply filter blur-[120px] animate-blob animation-delay-2000"></div>
+        <div class="absolute bottom-[-20%] left-[10%] w-[800px] h-[800px] bg-teal-300/30 rounded-full mix-blend-multiply filter blur-[120px] animate-blob animation-delay-4000"></div>
+        <div class="absolute bottom-[30%] right-[10%] w-[500px] h-[500px] bg-cyan-200/40 rounded-full mix-blend-multiply filter blur-[100px] animate-blob animation-delay-3000"></div>
     </div>
 
-    <!-- 根容器 -->
-    <div id="app-wrapper">
+    <!-- ==================== 1. 登录界面 ==================== -->
+    <div id="login-page" class="absolute inset-0 z-50 flex items-center justify-center bg-white/20 transition-opacity duration-700 backdrop-blur-sm">
+        <video id="login-video" autoplay muted loop playsinline>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-white-abstract-technology-lines-2848-large.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+        
+        <div class="relative z-10 w-full max-w-md p-10 m-4 liquid-glass rounded-[3rem] animate-pop-in text-center border-white/60 shadow-2xl">
+            <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80"></div>
 
-        <!-- 动态流体背景 -->
-        <div class="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-            <div class="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-emerald-300/40 rounded-full mix-blend-multiply filter blur-[100px] animate-blob"></div>
-            <div class="absolute top-[10%] right-[-20%] w-[600px] h-[600px] bg-blue-200/40 rounded-full mix-blend-multiply filter blur-[100px] animate-blob animation-delay-2000"></div>
-            <div class="absolute bottom-[-20%] left-[20%] w-[700px] h-[700px] bg-teal-200/40 rounded-full mix-blend-multiply filter blur-[100px] animate-blob animation-delay-4000"></div>
-            <div class="absolute bottom-[20%] right-[10%] w-[400px] h-[400px] bg-purple-100/40 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-3000"></div>
-        </div>
-
-        <!-- ==================== 1. 登录界面 ==================== -->
-        <div id="login-page" class="absolute inset-0 z-50 flex items-center justify-center bg-white/30 transition-opacity duration-700 backdrop-blur-sm">
-            <video id="login-video" autoplay muted loop playsinline>
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-white-abstract-technology-lines-2848-large.mp4" type="video/mp4">
-            </video>
-            <div class="video-overlay"></div>
-            
-            <div class="relative z-10 w-full max-w-md p-10 m-4 liquid-glass rounded-[3rem] animate-pop-in text-center border-white/60 shadow-2xl">
-                <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80"></div>
-
-                <div class="mb-10 relative">
-                    <div class="w-24 h-24 bg-gradient-to-br from-primary to-emerald-600 rounded-[2rem] mx-auto flex items-center justify-center mb-6 shadow-2xl shadow-green-500/30 rotate-3 hover:rotate-0 transition-all duration-500 border-[3px] border-white/40 ring-1 ring-black/5">
-                        <i class="fa-solid fa-leaf text-4xl text-white drop-shadow-lg"></i>
-                    </div>
-                    <h1 class="text-4xl font-bold tracking-wider text-gray-800 mb-2 drop-shadow-sm">HBC CRM</h1>
-                    <p class="text-sm text-gray-600 font-medium tracking-[0.3em] uppercase opacity-80">Mobile Optimized</p>
+            <div class="mb-10 relative">
+                <div class="w-24 h-24 bg-gradient-to-br from-primary to-emerald-600 rounded-[2rem] mx-auto flex items-center justify-center mb-6 shadow-2xl shadow-green-500/30 rotate-3 hover:rotate-0 transition-all duration-500 border-[3px] border-white/40 ring-1 ring-black/5">
+                    <i class="fa-solid fa-leaf text-4xl text-white drop-shadow-lg"></i>
                 </div>
-
-                <form id="login-form" class="space-y-6 text-left">
-                    <div class="group relative">
-                        <input type="text" id="login-id" placeholder=" " class="peer w-full px-6 py-4 rounded-2xl bg-white/40 border border-white/50 text-gray-800 focus:bg-white/80 focus:border-primary focus:ring-4 focus:ring-green-100 outline-none transition-all shadow-inner" required>
-                        <label class="absolute left-6 top-4 text-gray-400 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-primary peer-focus:bg-white/80 peer-focus:px-2 peer-focus:rounded-full pointer-events-none">工号 / ID</label>
-                    </div>
-                    <div class="group relative">
-                        <input type="password" id="login-pwd" placeholder=" " class="peer w-full px-6 py-4 rounded-2xl bg-white/40 border border-white/50 text-gray-800 focus:bg-white/80 focus:border-primary focus:ring-4 focus:ring-green-100 outline-none transition-all shadow-inner" required>
-                        <label class="absolute left-6 top-4 text-gray-400 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-primary peer-focus:bg-white/80 peer-focus:px-2 peer-focus:rounded-full pointer-events-none">密码 / PASSWORD</label>
-                    </div>
-                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-2xl font-bold text-white text-lg shadow-xl shadow-green-200 hover:shadow-green-400 hover:-translate-y-1 active:scale-95 transition-all duration-300 mt-4 border-t border-white/30 relative overflow-hidden group">
-                        <span class="relative z-10">进入系统</span>
-                        <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 rounded-2xl"></div>
-                    </button>
-                </form>
+                <h1 class="text-4xl font-bold tracking-wider text-gray-800 mb-2 drop-shadow-sm">HBC CRM</h1>
+                <p class="text-sm text-gray-600 font-medium tracking-[0.3em] uppercase opacity-80">Liquid Glass Edition</p>
             </div>
-        </div>
 
-        <!-- ==================== 2. 主应用界面 ==================== -->
-        <div id="app-container" class="hidden h-full flex flex-col md:flex-row relative z-10">
+            <form id="login-form" class="space-y-6 text-left">
+                <div class="group relative">
+                    <input type="text" id="login-id" placeholder=" " class="peer w-full px-6 py-4 rounded-2xl bg-white/40 border border-white/50 text-gray-800 focus:bg-white/80 focus:border-primary focus:ring-4 focus:ring-green-100 outline-none transition-all shadow-inner" required>
+                    <label class="absolute left-6 top-4 text-gray-400 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-primary peer-focus:bg-white/80 peer-focus:px-2 peer-focus:rounded-full pointer-events-none">工号 / ID</label>
+                </div>
+                <div class="group relative">
+                    <input type="password" id="login-pwd" placeholder=" " class="peer w-full px-6 py-4 rounded-2xl bg-white/40 border border-white/50 text-gray-800 focus:bg-white/80 focus:border-primary focus:ring-4 focus:ring-green-100 outline-none transition-all shadow-inner" required>
+                    <label class="absolute left-6 top-4 text-gray-400 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-primary peer-focus:bg-white/80 peer-focus:px-2 peer-focus:rounded-full pointer-events-none">密码 / PASSWORD</label>
+                </div>
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-2xl font-bold text-white text-lg shadow-xl shadow-green-200 hover:shadow-green-400 hover:-translate-y-1 active:scale-95 transition-all duration-300 mt-4 border-t border-white/30 relative overflow-hidden group">
+                    <span class="relative z-10">进入系统</span>
+                    <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 rounded-2xl"></div>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== 2. 主应用界面 ==================== -->
+    <div id="app-container" class="hidden h-full flex flex-col md:flex-row relative z-10">
+        
+        <!-- PC 端侧边栏 -->
+        <aside class="hidden md:flex flex-col w-72 liquid-glass h-[96%] z-20 m-4 my-auto rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] relative overflow-hidden">
+            <div class="absolute -top-20 -left-20 w-40 h-40 bg-white/40 blur-3xl rounded-full pointer-events-none"></div>
+
+            <div class="p-8 flex items-center gap-4 relative z-10">
+                <div class="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center text-white shadow-lg shadow-green-200 border border-white/30">
+                    <i class="fa-solid fa-leaf text-xl"></i>
+                </div>
+                <span class="font-bold text-gray-800 text-2xl tracking-tight">湖银 CRM</span>
+            </div>
             
-            <!-- PC 端侧边栏 -->
-            <aside class="hidden md:flex flex-col w-72 liquid-glass h-[96%] z-20 m-4 my-auto rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] relative overflow-hidden">
-                <div class="absolute -top-20 -left-20 w-40 h-40 bg-white/40 blur-3xl rounded-full pointer-events-none"></div>
+            <nav class="flex-1 px-5 space-y-3 mt-4 relative z-10">
+                <button onclick="router.navigate('overview')" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium group relative overflow-hidden" data-page="overview">
+                    <div class="absolute inset-0 bg-white/50 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 rounded-2xl"></div>
+                    <i class="fa-solid fa-chart-pie w-6 text-center relative z-10 group-hover:scale-110 transition-transform text-gray-400 group-hover:text-primary"></i> 
+                    <span class="relative z-10 group-hover:translate-x-1 transition-transform">概览</span>
+                </button>
+                <button onclick="router.navigate('customers')" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium group relative overflow-hidden" data-page="customers">
+                     <div class="absolute inset-0 bg-white/50 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 rounded-2xl"></div>
+                    <i class="fa-solid fa-users w-6 text-center relative z-10 group-hover:scale-110 transition-transform text-gray-400 group-hover:text-primary"></i> 
+                    <span class="relative z-10 group-hover:translate-x-1 transition-transform">客户管理</span>
+                </button>
+                <button onclick="router.navigate('transactions')" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium group relative overflow-hidden" data-page="transactions">
+                     <div class="absolute inset-0 bg-white/50 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 rounded-2xl"></div>
+                    <i class="fa-solid fa-stream w-6 text-center relative z-10 group-hover:scale-110 transition-transform text-gray-400 group-hover:text-primary"></i> 
+                    <span class="relative z-10 group-hover:translate-x-1 transition-transform">业务流水</span>
+                </button>
 
-                <div class="p-8 flex items-center gap-4 relative z-10">
-                    <div class="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center text-white shadow-lg shadow-green-200 border border-white/30">
-                        <i class="fa-solid fa-leaf text-xl"></i>
-                    </div>
-                    <span class="font-bold text-gray-800 text-2xl tracking-tight">湖银 CRM</span>
-                </div>
+                <div class="my-4 border-t border-gray-200/30 mx-4"></div>
                 
-                <nav class="flex-1 px-5 space-y-3 mt-4 relative z-10">
-                    <button onclick="router.navigate('overview')" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium group relative overflow-hidden" data-page="overview">
-                        <div class="absolute inset-0 bg-white/50 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 rounded-2xl"></div>
-                        <i class="fa-solid fa-chart-pie w-6 text-center relative z-10 group-hover:scale-110 transition-transform text-gray-400 group-hover:text-primary"></i> 
-                        <span class="relative z-10 group-hover:translate-x-1 transition-transform">概览</span>
-                    </button>
-                    <button onclick="router.navigate('customers')" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium group relative overflow-hidden" data-page="customers">
-                        <div class="absolute inset-0 bg-white/50 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 rounded-2xl"></div>
-                        <i class="fa-solid fa-users w-6 text-center relative z-10 group-hover:scale-110 transition-transform text-gray-400 group-hover:text-primary"></i> 
-                        <span class="relative z-10 group-hover:translate-x-1 transition-transform">客户管理</span>
-                    </button>
-                    <button onclick="router.navigate('transactions')" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium group relative overflow-hidden" data-page="transactions">
-                        <div class="absolute inset-0 bg-white/50 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 rounded-2xl"></div>
-                        <i class="fa-solid fa-stream w-6 text-center relative z-10 group-hover:scale-110 transition-transform text-gray-400 group-hover:text-primary"></i> 
-                        <span class="relative z-10 group-hover:translate-x-1 transition-transform">业务流水</span>
-                    </button>
+                <button onclick="showBusinessModal()" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium hover:bg-white/40 group">
+                    <i class="fa-solid fa-plus-circle w-6 text-center text-emerald-500 group-hover:rotate-90 transition-transform"></i> 新增业务
+                </button>
+                <button onclick="showFollowupModal()" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium hover:bg-white/40 group">
+                    <i class="fa-solid fa-comment-dots w-6 text-center text-blue-500 group-hover:-translate-y-1 transition-transform"></i> 新增跟进
+                </button>
 
-                    <div class="my-4 border-t border-gray-200/30 mx-4"></div>
-                    
-                    <button onclick="showBusinessModal()" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium hover:bg-white/40 group">
-                        <i class="fa-solid fa-plus-circle w-6 text-center text-emerald-500 group-hover:rotate-90 transition-transform"></i> 新增业务
-                    </button>
-                    <button onclick="showFollowupModal()" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium hover:bg-white/40 group">
-                        <i class="fa-solid fa-comment-dots w-6 text-center text-blue-500 group-hover:-translate-y-1 transition-transform"></i> 新增跟进
-                    </button>
-
-                    <button onclick="router.navigate('mine')" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium mt-auto mb-4 group" data-page="mine">
-                        <div class="w-8 h-8 rounded-full overflow-hidden border border-white/50 shadow-sm group-hover:ring-2 ring-primary transition-all bg-gray-100 flex items-center justify-center">
-                            <i class="fa-solid fa-user text-xs"></i>
-                        </div>
-                        我的信息
-                    </button>
-                </nav>
-            </aside>
-
-            <!-- 主内容区域 -->
-            <main class="flex-1 h-full overflow-hidden flex flex-col relative">
-                
-                <!-- 顶部标题栏 -->
-                <header class="px-6 py-6 md:px-8 md:py-8 flex justify-between items-center z-10">
-                    <div class="liquid-glass px-4 py-2 md:px-6 md:py-3 rounded-2xl inline-flex items-center gap-3 animate-fade-in shadow-sm">
-                        <h2 id="page-title" class="text-xl md:text-2xl font-bold text-gray-800 tracking-tight">概览</h2>
-                        <span class="w-px h-4 bg-gray-400/30"></span>
-                        <p class="text-xs text-gray-500 font-mono" id="current-date">--</p>
+                <button onclick="router.navigate('mine')" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium mt-auto mb-4 group" data-page="mine">
+                    <div class="w-8 h-8 rounded-full overflow-hidden border border-white/50 shadow-sm group-hover:ring-2 ring-primary transition-all bg-gray-100 flex items-center justify-center">
+                         <i class="fa-solid fa-user text-xs"></i>
                     </div>
-                    <div class="flex items-center gap-4 animate-fade-in">
-                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-full liquid-glass flex items-center justify-center text-gray-500 hover:text-primary hover:bg-white cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1 group" onclick="router.navigate('mine')">
-                            <i class="fa-solid fa-bell group-hover:swing"></i>
-                            <span class="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white shadow-sm animate-pulse"></span>
-                        </div>
-                    </div>
-                </header>
+                    我的信息
+                </button>
+            </nav>
+        </aside>
 
-                <!-- 动态内容容器 -->
-                <div id="content-area" class="flex-1 overflow-y-auto px-4 md:px-8 pb-32 md:pb-8 no-scrollbar scroll-smooth">
-                    <!-- JS 动态注入 -->
+        <!-- 主内容区域 -->
+        <main class="flex-1 h-full overflow-hidden flex flex-col relative">
+            
+            <!-- 顶部标题栏 -->
+            <header class="px-6 py-6 md:px-8 md:py-8 flex justify-between items-center z-10">
+                <div class="liquid-glass px-4 py-2 md:px-6 md:py-3 rounded-[1.5rem] inline-flex items-center gap-3 animate-fade-in shadow-sm border border-white/40">
+                    <h2 id="page-title" class="text-xl md:text-2xl font-bold text-gray-800 tracking-tight">概览</h2>
+                    <span class="w-px h-4 bg-gray-400/30"></span>
+                    <p class="text-xs text-gray-500 font-mono" id="current-date">--</p>
                 </div>
+                <div class="flex items-center gap-4 animate-fade-in">
+                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-full liquid-glass flex items-center justify-center text-gray-500 hover:text-primary hover:bg-white cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1 group" onclick="router.navigate('mine')">
+                        <i class="fa-solid fa-bell group-hover:swing"></i>
+                        <span class="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white shadow-sm animate-pulse"></span>
+                    </div>
+                </div>
+            </header>
 
-                <!-- 移动端底部导航栏 (优化版) -->
-                <nav class="md:hidden absolute bottom-6 left-4 right-4 liquid-glass-dark rounded-[2rem] py-2 z-30 flex justify-around items-center shadow-2xl border-t border-white/40">
-                    <button onclick="router.navigate('overview')" class="nav-item-m flex-1 py-3 flex flex-col items-center gap-1 text-[10px] text-gray-400 transition-colors" data-page="overview">
-                        <i class="fa-solid fa-chart-pie text-lg"></i>
-                        <span>概览</span>
-                    </button>
-                    <button onclick="router.navigate('customers')" class="nav-item-m flex-1 py-3 flex flex-col items-center gap-1 text-[10px] text-gray-400 transition-colors" data-page="customers">
-                        <i class="fa-solid fa-users text-lg"></i>
-                        <span>客户</span>
-                    </button>
-                    <!-- 中间新增业务按钮 -->
-                    <button onclick="showBusinessModal()" class="nav-item-m flex-1 py-3 flex flex-col items-center gap-1 text-[10px] text-gray-400 transition-colors">
-                        <div class="w-10 h-10 bg-primary/20 rounded-2xl flex items-center justify-center text-primary mb-0.5 shadow-sm border border-primary/20"><i class="fa-solid fa-plus text-lg"></i></div>
-                        <span>办业务</span>
-                    </button>
-                    <!-- 新增：跟进按钮 -->
-                    <button onclick="showFollowupModal()" class="nav-item-m flex-1 py-3 flex flex-col items-center gap-1 text-[10px] text-gray-400 transition-colors" data-page="followup">
-                        <i class="fa-solid fa-comment-dots text-lg"></i>
-                        <span>跟进</span>
-                    </button>
-                    <button onclick="router.navigate('mine')" class="nav-item-m flex-1 py-3 flex flex-col items-center gap-1 text-[10px] text-gray-400 transition-colors" data-page="mine">
-                        <i class="fa-solid fa-user-circle text-lg"></i>
-                        <span>我的</span>
-                    </button>
-                </nav>
+            <!-- 动态内容容器 -->
+            <div id="content-area" class="flex-1 overflow-y-auto px-4 md:px-8 pb-32 md:pb-8 no-scrollbar scroll-smooth">
+                <!-- JS 动态注入 -->
+            </div>
 
-            </main>
-        </div>
+            <!-- 移动端底部导航栏 -->
+            <nav class="md:hidden absolute bottom-6 left-4 right-4 liquid-glass-dark rounded-[2.5rem] py-2 z-30 flex justify-around items-center shadow-2xl border-t border-white/40 backdrop-blur-xl">
+                <button onclick="router.navigate('overview')" class="nav-item-m flex-1 py-3 flex flex-col items-center gap-1 text-[10px] text-gray-400 transition-colors" data-page="overview">
+                    <i class="fa-solid fa-chart-pie text-lg"></i>
+                    <span>概览</span>
+                </button>
+                <button onclick="router.navigate('customers')" class="nav-item-m flex-1 py-3 flex flex-col items-center gap-1 text-[10px] text-gray-400 transition-colors" data-page="customers">
+                    <i class="fa-solid fa-users text-lg"></i>
+                    <span>客户</span>
+                </button>
+                <!-- 中间新增业务按钮 -->
+                <button onclick="showBusinessModal()" class="nav-item-m flex-1 py-3 flex flex-col items-center gap-1 text-[10px] text-gray-400 transition-colors">
+                    <div class="w-10 h-10 bg-primary/20 rounded-2xl flex items-center justify-center text-primary mb-0.5 shadow-sm border border-primary/20"><i class="fa-solid fa-plus text-lg"></i></div>
+                    <span>办业务</span>
+                </button>
+                <!-- 新增：跟进按钮 -->
+                <button onclick="showFollowupModal()" class="nav-item-m flex-1 py-3 flex flex-col items-center gap-1 text-[10px] text-gray-400 transition-colors" data-page="followup">
+                    <i class="fa-solid fa-comment-dots text-lg"></i>
+                    <span>跟进</span>
+                </button>
+                <button onclick="router.navigate('mine')" class="nav-item-m flex-1 py-3 flex flex-col items-center gap-1 text-[10px] text-gray-400 transition-colors" data-page="mine">
+                    <i class="fa-solid fa-user-circle text-lg"></i>
+                    <span>我的</span>
+                </button>
+            </nav>
+
+        </main>
     </div>
 
     <!-- ==================== 模态框 ==================== -->
     <div id="modal-overlay" class="hidden fixed inset-0 bg-gray-900/20 backdrop-blur-md z-40 transition-opacity duration-500" onclick="closeAllModals()"></div>
 
-    <!-- 业务办理模态框 (支持修改) -->
+    <!-- 业务办理模态框 -->
     <div id="business-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
         <div class="pointer-events-auto w-full max-w-lg liquid-glass-dark rounded-[2.5rem] p-8 transform transition-all duration-300 animate-pop-in relative overflow-hidden">
              <div class="absolute -top-20 -right-20 w-60 h-60 bg-green-300/30 rounded-full blur-3xl pointer-events-none"></div>
@@ -461,17 +436,6 @@
 
 
     <script>
-        // ==================== 0. 模式切换逻辑 ====================
-        let isMobileMode = false;
-        function toggleMobileMode() {
-            isMobileMode = !isMobileMode;
-            document.body.classList.toggle('mobile-mode', isMobileMode);
-            // 触发 resize 事件以重绘图表
-            setTimeout(() => {
-                window.dispatchEvent(new Event('resize'));
-            }, 300);
-        }
-
         // ==================== 1. 数据逻辑 ====================
         const STORE_KEY = 'hbc_crm_v7_mobile_opt';
         
@@ -640,7 +604,7 @@
 
             const html = `
                 <div class="space-y-6">
-                    <!-- 顶部卡片 (胶囊优化：Mobile更细长) -->
+                    <!-- 顶部卡片 -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                         <div class="${todayCardClass} text-white p-5 md:p-6 rounded-[2rem] shadow-xl relative overflow-hidden group hover-glass border border-white/20 min-h-[140px] flex flex-col justify-center">
                             <div class="absolute top-[-50%] right-[-50%] w-64 h-64 bg-white/20 rounded-full blur-3xl animate-blob"></div>
@@ -725,7 +689,7 @@
             const sortedTxs = [...db.data.transactions].sort((a,b) => new Date(b.date) - new Date(a.date));
             const html = `
                 <div class="h-full flex flex-col">
-                    <div class="sticky top-0 z-20 pb-4 bg-[#ECFDF5]/80 backdrop-blur-sm pt-2">
+                    <div class="sticky top-0 z-20 pb-4 backdrop-blur-sm pt-2">
                         <div class="liquid-glass px-6 py-4 rounded-2xl flex justify-between items-center">
                             <h2 class="text-xl font-bold text-gray-800"><i class="fa-solid fa-stream mr-2 text-primary"></i> 业务流水</h2>
                             <span class="text-sm text-gray-500">共 ${sortedTxs.length} 笔</span>
@@ -1046,9 +1010,84 @@
             alert('跟进已保存'); 
             closeAllModals(); 
         }
-        function renderMine(container) { /* No changes needed, keeping existing */
+        
+        function renderMine(container) {
              const user = db.data.currentUser || { id: 'Unknown' };
-             container.innerHTML = `<div class="liquid-glass p-8 rounded-[3rem] text-center"><div class="w-24 h-24 bg-primary text-white rounded-full mx-auto flex items-center justify-center text-4xl mb-4"><i class="fa-solid fa-user-tie"></i></div><h2 class="text-2xl font-bold text-gray-800">客户经理</h2><p class="text-gray-500 mb-2">ID: ${user.id}</p><button onclick="location.reload()" class="bg-red-500 text-white px-6 py-2 rounded-xl mt-4">退出登录</button></div>`;
+             container.innerHTML = `
+                <div class="space-y-8 animate-fade-in">
+                    <div class="liquid-glass p-8 rounded-[3rem] text-center relative overflow-hidden border border-white/40 shadow-xl">
+                        <div class="absolute top-0 right-0 w-40 h-40 bg-green-200/40 rounded-full blur-3xl"></div>
+                        <div class="w-24 h-24 bg-gradient-to-br from-primary to-emerald-600 text-white rounded-[2rem] mx-auto flex items-center justify-center text-4xl mb-4 shadow-lg rotate-3 border-4 border-white/30">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800">客户经理</h2>
+                        <p class="text-gray-500 mb-2 font-mono bg-white/40 inline-block px-3 py-1 rounded-lg">ID: ${user.id}</p>
+                        <p class="text-xs text-gray-400">湖银总行营业部</p>
+                    </div>
+
+                    <div class="liquid-glass rounded-[2.5rem] overflow-hidden divide-y divide-gray-200/50 border border-white/40">
+                        <div onclick="exportData()" class="p-6 hover:bg-white/40 cursor-pointer flex justify-between items-center transition-colors group">
+                            <div class="flex items-center gap-5">
+                                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm"><i class="fa-solid fa-cloud-download-alt text-xl"></i></div>
+                                <div>
+                                    <span class="font-bold text-gray-700 text-lg block group-hover:text-blue-600 transition-colors">数据备份导出</span>
+                                    <span class="text-xs text-gray-400">下载 JSON 数据文件</span>
+                                </div>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-white/50 flex items-center justify-center text-gray-400 group-hover:text-blue-600"><i class="fa-solid fa-angle-right"></i></div>
+                        </div>
+                        
+                        <div class="p-6 hover:bg-white/40 cursor-pointer flex justify-between items-center relative transition-colors group">
+                            <div class="flex items-center gap-5">
+                                <div class="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm"><i class="fa-solid fa-cloud-upload-alt text-xl"></i></div>
+                                <div>
+                                    <span class="font-bold text-gray-700 text-lg block group-hover:text-orange-600 transition-colors">数据恢复导入</span>
+                                    <span class="text-xs text-gray-400">点击上传 JSON 备份文件</span>
+                                </div>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-white/50 flex items-center justify-center text-gray-400 group-hover:text-orange-600"><i class="fa-solid fa-angle-right"></i></div>
+                            <input type="file" onchange="importData(this)" class="absolute inset-0 opacity-0 cursor-pointer" accept=".json">
+                        </div>
+                        
+                         <div onclick="if(confirm('确定要退出登录吗？')){db.data.currentUser=null;db.save();location.reload();}" class="p-6 hover:bg-red-50/50 cursor-pointer flex justify-between items-center group transition-colors">
+                            <div class="flex items-center gap-5">
+                                <div class="w-12 h-12 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center group-hover:bg-red-500 group-hover:text-white transition-all shadow-sm"><i class="fa-solid fa-power-off text-xl"></i></div>
+                                <span class="font-bold text-red-500 text-lg">安全退出</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             `;
+        }
+
+        // --- Export/Import ---
+        function exportData() {
+            const dataStr = JSON.stringify(db.data);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', `HBC_CRM_Backup_${new Date().toISOString().slice(0,10)}.json`);
+            linkElement.click();
+        }
+
+        function importData(input) {
+            const file = input.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    if(confirm('导入数据将覆盖当前所有数据，确定要继续吗？')) {
+                        db.data = json;
+                        db.save();
+                        alert('数据恢复成功！页面即将刷新。');
+                        location.reload();
+                    }
+                } catch(err) {
+                    alert('文件格式错误，请上传正确的 JSON 备份文件。');
+                }
+            };
+            reader.readAsText(file);
         }
 
         // Init
