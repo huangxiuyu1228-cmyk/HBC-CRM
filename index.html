@@ -70,7 +70,6 @@
             font-family: 'Noto Sans SC', sans-serif;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
-            /* 2. 多彩渐变背景 (Vivid Gradient) */
             background: linear-gradient(-45deg, #34d399, #3b82f6, #8b5cf6, #f59e0b);
             background-size: 300% 300%;
             animation: gradientX 12s ease infinite;
@@ -79,30 +78,22 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* 3. 增强版 3D 厚实玻璃质感 (Thicker Glass) */
         .liquid-glass {
-            background: rgba(255, 255, 255, 0.35); /* 稍微降低透明度以增加实体感 */
+            background: rgba(255, 255, 255, 0.35); 
             backdrop-filter: blur(35px) saturate(140%);
             -webkit-backdrop-filter: blur(35px) saturate(140%);
-            
             border-radius: 1.5rem;
-            
-            /* 强高光边框 */
             border-top: 2px solid rgba(255, 255, 255, 0.95);
             border-left: 2px solid rgba(255, 255, 255, 0.8);
             border-right: 1px solid rgba(255, 255, 255, 0.2);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            
-            /* 深邃阴影 + 内部发光 */
             box-shadow: 
-                0 20px 40px -10px rgba(0, 0, 0, 0.15), /* 更深的外部投影 */
+                0 20px 40px -10px rgba(0, 0, 0, 0.15), 
                 inset 0 0 0 1px rgba(255, 255, 255, 0.2), 
-                inset 0 10px 20px rgba(255, 255, 255, 0.6); /* 顶部强内发光，模拟厚度 */
-            
+                inset 0 10px 20px rgba(255, 255, 255, 0.6);
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         
-        /* 移动端细长胶囊优化 */
         @media (max-width: 768px) {
             .liquid-glass {
                 border-radius: 1.2rem; 
@@ -147,7 +138,7 @@
 </head>
 <body class="text-gray-700 h-screen w-screen overflow-hidden relative selection:bg-green-200 selection:text-green-900">
 
-    <!-- 背景装饰 (色彩增强) -->
+    <!-- 背景装饰 -->
     <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div class="absolute top-[-10%] left-[-10%] w-[800px] h-[800px] bg-emerald-400/40 rounded-full mix-blend-overlay filter blur-[100px] animate-blob"></div>
         <div class="absolute top-[20%] right-[-20%] w-[600px] h-[600px] bg-purple-400/40 rounded-full mix-blend-overlay filter blur-[100px] animate-blob animation-delay-2000"></div>
@@ -248,12 +239,7 @@
                     <span class="w-px h-4 bg-gray-500/30"></span>
                     <p class="text-xs text-gray-600 font-mono font-bold" id="current-date">--</p>
                 </div>
-                <div class="flex items-center gap-4 animate-fade-in">
-                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-full liquid-glass flex items-center justify-center text-gray-500 hover:text-primary hover:bg-white cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1 group border border-white/60" onclick="router.navigate('mine')">
-                        <i class="fa-solid fa-bell group-hover:swing"></i>
-                        <span class="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white shadow-sm animate-pulse"></span>
-                    </div>
-                </div>
+                <!-- 移除右上角通知按钮 -->
             </header>
 
             <!-- 动态内容容器 -->
@@ -423,7 +409,7 @@
 
     <script>
         // ==================== 1. 数据逻辑 ====================
-        const STORE_KEY = 'hbc_crm_v8_visual_upgrade';
+        const STORE_KEY = 'hbc_crm_v9_final_fix';
         
         function generateMockHistory() {
             const types = ['一年定期', '两年定期', '三年定期', '通知存款', '自营理财', '代销理财', '扫码付', '消费贷', '按揭贷'];
@@ -532,6 +518,10 @@
             currentPage: 'login',
             navigate(page) {
                 this.currentPage = page;
+                
+                // Update Date on navigation
+                updateDate();
+
                 document.querySelectorAll('.nav-item, .nav-item-m').forEach(el => {
                     const active = el.dataset.page === page;
                     if(el.classList.contains('nav-item')) {
@@ -575,6 +565,14 @@
             }
         };
 
+        function updateDate() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+            const dateStr = now.toLocaleDateString('zh-CN', options);
+            const dateEl = document.getElementById('current-date');
+            if(dateEl) dateEl.innerText = dateStr;
+        }
+
         // --- Overview (细长胶囊优化) ---
         function renderOverview(container) {
             const stats = db.getStats();
@@ -587,6 +585,15 @@
                 todayCardClass = "bg-gradient-to-br from-amber-300 to-orange-500 shadow-orange-200"; 
                 todayIcon = "fa-coins";
             }
+
+            // Calculate Daily Performance
+            const dailyStats = {};
+            db.data.transactions.forEach(t => {
+                if(!dailyStats[t.date]) dailyStats[t.date] = { amount: 0, count: 0 };
+                dailyStats[t.date].amount += parseFloat(t.amount);
+                dailyStats[t.date].count += 1;
+            });
+            const sortedDays = Object.keys(dailyStats).sort((a,b) => new Date(b) - new Date(a)).slice(0, 5);
 
             const html = `
                 <div class="space-y-6">
@@ -635,6 +642,32 @@
                         <div class="liquid-glass rounded-[2rem] md:rounded-[2.5rem] p-4 md:p-6 min-h-[350px] md:min-h-[400px] flex flex-col border border-white/60">
                             <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="w-1.5 h-5 bg-blue-500 rounded-full"></span> 业绩趋势</h3>
                             <div id="chart-line" class="flex-1 w-full h-full"></div>
+                        </div>
+                    </div>
+
+                    <!-- 新增：近期日业绩 -->
+                    <div class="liquid-glass rounded-[2rem] md:rounded-[2.5rem] p-5 md:p-6 border border-white/60">
+                        <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="w-1.5 h-5 bg-purple-500 rounded-full"></span> 近期日业绩趋势</h3>
+                        <div class="space-y-3">
+                            ${sortedDays.map(date => {
+                                const dayStat = dailyStats[date];
+                                return `
+                                <div class="flex items-center justify-between p-3 bg-white/40 rounded-xl hover:bg-white/60 transition-colors cursor-pointer border border-white/30">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-sm font-bold">
+                                            ${date.slice(8)}日
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-bold text-gray-700">${date}</div>
+                                            <div class="text-xs text-gray-500">${dayStat.count} 笔业务</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-primary font-bold font-mono">+${dayStat.amount.toLocaleString()}</div>
+                                    </div>
+                                </div>
+                                `;
+                            }).join('')}
                         </div>
                     </div>
                 </div>
@@ -1093,7 +1126,7 @@
             if(db.data.currentUser) {
                 document.getElementById('login-page').style.display='none';
                 document.getElementById('app-container').classList.remove('hidden');
-                document.getElementById('current-date').innerText = new Date().toLocaleDateString();
+                updateDate();
                 router.navigate('overview');
             }
             document.getElementById('login-form').addEventListener('submit', (e)=>{
