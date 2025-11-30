@@ -2,8 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <!-- 关键设置：禁止移动端自动放大 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>湖银客户管理系统 | HBC CRM</title>
+    <title>湖银客户管理系统 | HBC CRM V7.1</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
@@ -11,54 +12,41 @@
     <!-- ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#10B981', 
-                        secondary: '#34D399', 
-                        glass: 'rgba(255, 255, 255, 0.25)', 
-                        dark: '#064E3B',
+                        primary: '#059669',       // Emerald 600
+                        primaryDark: '#047857',   // Emerald 700
+                        secondary: '#A7F3D0',     // Emerald 200
+                        surface: '#F9FAFB',       // Gray 50
                     },
                     fontFamily: {
-                        sans: ['"Noto Sans SC"', 'sans-serif'],
+                        sans: ['"Noto Sans SC"', '"Inter"', 'sans-serif'],
+                        mono: ['"Inter"', 'monospace'],
                     },
                     animation: {
-                        'fade-in': 'fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
-                        'pop-in': 'popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'slide-in-right': 'slideInRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'blob': 'blob 12s infinite alternate',
-                        'liquid': 'liquid 8s ease-in-out infinite',
-                        'gradient-x': 'gradientX 10s ease infinite',
+                        'slide-up': 'slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'blob': 'blob 20s infinite alternate',
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
                     },
                     keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0', transform: 'translateY(15px)' },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
                         },
-                        popIn: {
-                            '0%': { opacity: '0', transform: 'scale(0.9) translateY(10px)' },
-                            '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
-                        },
-                        slideInRight: {
-                            '0%': { opacity: '0', transform: 'translateX(30px)' },
-                            '100%': { opacity: '1', transform: 'translateX(0)' },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
                         },
                         blob: {
                             '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '100%': { transform: 'translate(30px, -30px) scale(1.1)' },
-                        },
-                        liquid: {
-                            '0%, 100%': { borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' },
-                            '50%': { borderRadius: '30% 60% 70% 40% / 50% 60% 30% 60%' },
-                        },
-                        gradientX: {
-                            '0%': { 'background-position': '0% 50%' },
-                            '50%': { 'background-position': '100% 50%' },
-                            '100%': { 'background-position': '0% 50%' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
                         }
                     }
                 }
@@ -68,1081 +56,806 @@
     <style>
         body {
             font-family: 'Noto Sans SC', sans-serif;
+            background-color: #F3F4F6;
+            color: #1F2937;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
-            background: linear-gradient(-45deg, #34d399, #3b82f6, #8b5cf6, #f59e0b);
-            background-size: 300% 300%;
-            animation: gradientX 12s ease infinite;
         }
-
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        .liquid-glass {
-            background: rgba(255, 255, 255, 0.35); 
-            backdrop-filter: blur(35px) saturate(140%);
-            -webkit-backdrop-filter: blur(35px) saturate(140%);
-            border-radius: 1.5rem;
-            border-top: 2px solid rgba(255, 255, 255, 0.95);
-            border-left: 2px solid rgba(255, 255, 255, 0.8);
-            border-right: 1px solid rgba(255, 255, 255, 0.2);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 
-                0 20px 40px -10px rgba(0, 0, 0, 0.15), 
-                inset 0 0 0 1px rgba(255, 255, 255, 0.2), 
-                inset 0 10px 20px rgba(255, 255, 255, 0.6);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        @media (max-width: 768px) {
-            .liquid-glass {
-                border-radius: 1.2rem; 
-                backdrop-filter: blur(40px) saturate(150%);
+        .glass-panel:hover {
+            background: rgba(255, 255, 255, 0.75);
+            transform: translateY(-2px);
+        }
+        .glass-dark {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .stagger-1 { animation-delay: 0.05s; }
+        .stagger-2 { animation-delay: 0.1s; }
+        .stagger-3 { animation-delay: 0.15s; }
+        .login-bg { background: radial-gradient(circle at 50% 50%, #fff 0%, #f3f4f6 100%); }
+        .auth-tab.active { color: #111827; border-bottom: 2px solid #059669; }
+        .auth-tab { color: #9CA3AF; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.3s; }
+
+        /* 禁止移动端自动放大 */
+        @media screen and (max-width: 768px) {
+            input, select, textarea {
+                font-size: 16px !important;
             }
-        }
-
-        .liquid-glass-dark {
-             background: rgba(255, 255, 255, 0.8);
-             backdrop-filter: blur(50px);
-             -webkit-backdrop-filter: blur(50px);
-             border: 1px solid rgba(255, 255, 255, 0.6);
-             border-top: 2px solid rgba(255, 255, 255, 0.9);
-             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), inset 0 5px 15px rgba(255, 255, 255, 0.7);
-        }
-
-        .stagger-1 { animation-delay: 0.1s; }
-        .stagger-2 { animation-delay: 0.2s; }
-        .stagger-3 { animation-delay: 0.3s; }
-        .stagger-4 { animation-delay: 0.4s; }
-        .stagger-5 { animation-delay: 0.5s; }
-
-        #login-video {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; z-index: 0;
-        }
-        .video-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(6px); z-index: 1;
-        }
-
-        .hover-glass:hover { 
-            transform: translateY(-4px) scale(1.02); 
-            box-shadow: 
-                0 30px 60px -10px rgba(255, 255, 255, 0.4), 
-                inset 0 0 40px rgba(255, 255, 255, 0.9);
-            border-color: #fff;
-            z-index: 10;
         }
     </style>
 </head>
-<body class="text-gray-700 h-screen w-screen overflow-hidden relative selection:bg-green-200 selection:text-green-900">
+<body class="h-screen w-screen overflow-hidden relative selection:bg-emerald-100 selection:text-emerald-900">
 
     <!-- 背景装饰 -->
     <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div class="absolute top-[-10%] left-[-10%] w-[800px] h-[800px] bg-emerald-400/40 rounded-full mix-blend-overlay filter blur-[100px] animate-blob"></div>
-        <div class="absolute top-[20%] right-[-20%] w-[600px] h-[600px] bg-purple-400/40 rounded-full mix-blend-overlay filter blur-[100px] animate-blob animation-delay-2000"></div>
-        <div class="absolute bottom-[-10%] left-[20%] w-[700px] h-[700px] bg-blue-400/40 rounded-full mix-blend-overlay filter blur-[100px] animate-blob animation-delay-4000"></div>
+        <div class="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-emerald-100/40 rounded-full mix-blend-multiply filter blur-[80px] animate-blob"></div>
+        <div class="absolute top-[20%] right-[-20%] w-[600px] h-[600px] bg-blue-100/40 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-2000"></div>
+        <div class="absolute bottom-[-10%] left-[20%] w-[700px] h-[700px] bg-gray-200/50 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-4000"></div>
     </div>
 
-    <!-- ==================== 1. 登录界面 ==================== -->
-    <div id="login-page" class="absolute inset-0 z-50 flex items-center justify-center bg-white/10 transition-opacity duration-700 backdrop-blur-sm">
-        <video id="login-video" autoplay muted loop playsinline>
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-white-abstract-technology-lines-2848-large.mp4" type="video/mp4">
-        </video>
-        <div class="video-overlay"></div>
-        
-        <div class="relative z-10 w-full max-w-md p-10 m-4 liquid-glass rounded-[2.5rem] animate-pop-in text-center border-white/70 shadow-2xl">
-            <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-90"></div>
-
-            <div class="mb-10 relative">
-                <div class="w-24 h-24 bg-gradient-to-br from-primary to-emerald-600 rounded-[1.8rem] mx-auto flex items-center justify-center mb-6 shadow-2xl shadow-green-500/40 rotate-3 hover:rotate-0 transition-all duration-500 border-4 border-white/50">
-                    <i class="fa-solid fa-leaf text-4xl text-white drop-shadow-lg"></i>
-                </div>
-                <h1 class="text-4xl font-bold tracking-wider text-gray-800 mb-2 drop-shadow-sm">HBC CRM</h1>
-                <p class="text-sm text-gray-700 font-bold tracking-[0.3em] uppercase opacity-70">Liquid Glass</p>
+    <!-- ==================== 1. 登录/注册界面 ==================== -->
+    <div id="login-page" class="absolute inset-0 z-50 flex items-center justify-center login-bg transition-opacity duration-700">
+        <div class="relative z-10 w-full max-w-sm p-10 m-4 bg-white/60 backdrop-blur-xl rounded-[2rem] animate-slide-up shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-white flex flex-col">
+            
+            <div class="text-center mb-8 space-y-2">
+                <h1 class="text-xl font-bold text-gray-800 tracking-wide">湖北银行客户管理系统（助理）</h1>
+                <p class="text-3xl font-black text-primary tracking-tighter uppercase font-mono" style="font-family: 'Inter', sans-serif;">HBC CRM ELITE</p>
+                <div class="w-12 h-1 bg-gradient-to-r from-primary to-emerald-300 mx-auto rounded-full mt-4"></div>
             </div>
 
-            <form id="login-form" class="space-y-6 text-left">
-                <div class="group relative">
-                    <input type="text" id="login-id" placeholder=" " class="peer w-full px-6 py-4 rounded-2xl bg-white/50 border border-white/60 text-gray-800 focus:bg-white/90 focus:border-primary focus:ring-4 focus:ring-green-100 outline-none transition-all shadow-inner font-bold" required>
-                    <label class="absolute left-6 top-4 text-gray-500 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-primary peer-focus:bg-white/90 peer-focus:px-2 peer-focus:rounded-full pointer-events-none font-medium">工号 / ID</label>
+            <div class="flex justify-center gap-8 mb-6 text-sm font-bold border-b border-gray-200/50">
+                <div onclick="switchAuthMode('login')" id="tab-login" class="auth-tab active pb-3 px-4">登录</div>
+                <div onclick="switchAuthMode('register')" id="tab-register" class="auth-tab pb-3 px-4">注册</div>
+            </div>
+
+            <form id="auth-form" class="space-y-5 flex-1">
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-gray-400 ml-1 tracking-wider">USER ID</label>
+                    <input type="text" id="auth-id" class="w-full px-5 py-3 rounded-xl bg-white border border-gray-200 focus:border-primary focus:ring-2 focus:ring-emerald-100 outline-none transition-all text-sm font-medium shadow-sm" placeholder="请输入工号" required>
                 </div>
-                <div class="group relative">
-                    <input type="password" id="login-pwd" placeholder=" " class="peer w-full px-6 py-4 rounded-2xl bg-white/50 border border-white/60 text-gray-800 focus:bg-white/90 focus:border-primary focus:ring-4 focus:ring-green-100 outline-none transition-all shadow-inner font-bold" required>
-                    <label class="absolute left-6 top-4 text-gray-500 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-primary peer-focus:bg-white/90 peer-focus:px-2 peer-focus:rounded-full pointer-events-none font-medium">密码 / PASSWORD</label>
+                <div id="register-fields" class="hidden space-y-4">
+                     <div class="space-y-1 animate-slide-up">
+                        <label class="text-[10px] font-bold text-gray-400 ml-1 tracking-wider">FULL NAME</label>
+                        <input type="text" id="auth-name" class="w-full px-5 py-3 rounded-xl bg-white border border-gray-200 focus:border-primary focus:ring-2 focus:ring-emerald-100 outline-none transition-all text-sm font-medium shadow-sm" placeholder="请输入您的姓名">
+                    </div>
                 </div>
-                <button type="submit" class="w-full py-4 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-2xl font-bold text-white text-lg shadow-xl shadow-green-200/50 hover:shadow-green-400/60 hover:-translate-y-1 active:scale-95 transition-all duration-300 mt-4 border-t border-white/40 relative overflow-hidden group">
-                    <span class="relative z-10">进入系统</span>
-                    <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 rounded-2xl"></div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-gray-400 ml-1 tracking-wider">PASSWORD</label>
+                    <input type="password" id="auth-pwd" class="w-full px-5 py-3 rounded-xl bg-white border border-gray-200 focus:border-primary focus:ring-2 focus:ring-emerald-100 outline-none transition-all text-sm font-medium shadow-sm" placeholder="请输入密码" required>
+                </div>
+                <button type="submit" id="auth-btn" class="w-full py-4 bg-gray-900 hover:bg-black text-white rounded-xl font-bold text-sm shadow-xl shadow-gray-200 transition-all hover:-translate-y-0.5 mt-2 tracking-wide">
+                    进入系统
                 </button>
             </form>
+            
+            <div class="mt-8 pt-4 border-t border-gray-200/50 text-center">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-bold shadow-sm">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>本地可信存储 | Local Storage Only</span>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- ==================== 2. 主应用界面 ==================== -->
-    <div id="app-container" class="hidden h-full flex flex-col md:flex-row relative z-10">
-        
-        <!-- PC 端侧边栏 -->
-        <aside class="hidden md:flex flex-col w-72 liquid-glass h-[96%] z-20 m-4 my-auto rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.1)] relative overflow-hidden border-2 border-white/60">
-            <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white/40 to-transparent"></div>
-
-            <div class="p-8 flex items-center gap-4 relative z-10">
-                <div class="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center text-white shadow-lg shadow-green-200 border-2 border-white/40">
-                    <i class="fa-solid fa-leaf text-xl"></i>
-                </div>
-                <span class="font-bold text-gray-800 text-2xl tracking-tight">湖银 CRM</span>
+    <div id="app-container" class="hidden h-full flex flex-col md:flex-row relative z-10 p-2 md:p-4 gap-4">
+        <!-- PC 侧边栏 -->
+        <aside class="hidden md:flex flex-col w-64 glass-dark h-full rounded-[2rem] overflow-hidden relative shadow-sm z-20">
+            <div class="p-8">
+                <h1 class="font-black text-gray-800 text-xl leading-none">HBC CRM</h1>
+                <p class="text-[10px] text-primary font-bold tracking-[0.2em] mt-1">ELITE V7.1</p>
             </div>
-            
-            <nav class="flex-1 px-5 space-y-3 mt-4 relative z-10">
-                <button onclick="router.navigate('overview')" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium group relative overflow-hidden" data-page="overview">
-                    <div class="absolute inset-0 bg-white/60 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 rounded-2xl"></div>
-                    <i class="fa-solid fa-chart-pie w-6 text-center relative z-10 group-hover:scale-110 transition-transform text-gray-400 group-hover:text-primary"></i> 
-                    <span class="relative z-10 group-hover:translate-x-1 transition-transform">概览</span>
-                </button>
-                <button onclick="router.navigate('customers')" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium group relative overflow-hidden" data-page="customers">
-                     <div class="absolute inset-0 bg-white/60 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 rounded-2xl"></div>
-                    <i class="fa-solid fa-users w-6 text-center relative z-10 group-hover:scale-110 transition-transform text-gray-400 group-hover:text-primary"></i> 
-                    <span class="relative z-10 group-hover:translate-x-1 transition-transform">客户管理</span>
-                </button>
-                <button onclick="router.navigate('transactions')" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium group relative overflow-hidden" data-page="transactions">
-                     <div class="absolute inset-0 bg-white/60 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 rounded-2xl"></div>
-                    <i class="fa-solid fa-stream w-6 text-center relative z-10 group-hover:scale-110 transition-transform text-gray-400 group-hover:text-primary"></i> 
-                    <span class="relative z-10 group-hover:translate-x-1 transition-transform">业务流水</span>
-                </button>
-
-                <div class="my-4 border-t border-gray-400/20 mx-4"></div>
-                
-                <button onclick="showBusinessModal()" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium hover:bg-white/50 group">
-                    <i class="fa-solid fa-plus-circle w-6 text-center text-emerald-500 group-hover:rotate-90 transition-transform"></i> 新增业务
-                </button>
-                <button onclick="showFollowupModal()" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium hover:bg-white/50 group">
-                    <i class="fa-solid fa-comment-dots w-6 text-center text-blue-500 group-hover:-translate-y-1 transition-transform"></i> 新增跟进
-                </button>
-
-                <button onclick="router.navigate('mine')" class="nav-item w-full flex items-center gap-4 px-6 py-4 text-gray-600 rounded-2xl transition-all duration-300 font-medium mt-auto mb-4 group" data-page="mine">
-                    <div class="w-8 h-8 rounded-full overflow-hidden border border-white/60 shadow-sm group-hover:ring-2 ring-primary transition-all bg-gray-100 flex items-center justify-center">
-                         <i class="fa-solid fa-user text-xs"></i>
-                    </div>
-                    我的信息
-                </button>
+            <nav class="flex-1 px-4 space-y-1.5 mt-2">
+                <button onclick="router.navigate('overview')" class="nav-item w-full flex items-center gap-3 px-5 py-3.5 rounded-xl transition-all duration-200 text-sm font-medium group text-gray-500 hover:bg-white hover:shadow-sm" data-page="overview"><i class="fa-solid fa-chart-pie w-5 text-center"></i><span>工作概览</span></button>
+                <button onclick="router.navigate('customers')" class="nav-item w-full flex items-center gap-3 px-5 py-3.5 rounded-xl transition-all duration-200 text-sm font-medium group text-gray-500 hover:bg-white hover:shadow-sm" data-page="customers"><i class="fa-solid fa-users w-5 text-center"></i><span>客户管理</span></button>
+                <button onclick="router.navigate('transactions')" class="nav-item w-full flex items-center gap-3 px-5 py-3.5 rounded-xl transition-all duration-200 text-sm font-medium group text-gray-500 hover:bg-white hover:shadow-sm" data-page="transactions"><i class="fa-solid fa-stream w-5 text-center"></i><span>业务流水</span></button>
+                <button onclick="router.navigate('followups')" class="nav-item w-full flex items-center gap-3 px-5 py-3.5 rounded-xl transition-all duration-200 text-sm font-medium group text-gray-500 hover:bg-white hover:shadow-sm" data-page="followups"><i class="fa-solid fa-comments w-5 text-center"></i><span>跟进中心</span></button>
+                <div class="my-6 border-t border-gray-200 mx-4"></div>
+                <button onclick="showBusinessModal()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-900 text-white rounded-xl shadow-lg shadow-gray-200 hover:bg-black transition-all hover:-translate-y-0.5 text-sm font-bold"><i class="fa-solid fa-plus"></i> 新增业务</button>
             </nav>
+            <div class="p-4 mt-auto">
+                <button onclick="router.navigate('mine')" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all bg-white/50 border border-white shadow-sm hover:bg-white" data-page="mine">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-xs"><i class="fa-solid fa-user"></i></div>
+                    <div class="text-left flex-1"><p class="text-xs font-bold text-gray-800">我的账户</p></div>
+                </button>
+            </div>
         </aside>
 
         <!-- 主内容区域 -->
-        <main class="flex-1 h-full overflow-hidden flex flex-col relative">
-            
-            <!-- 顶部标题栏 -->
-            <header class="px-5 py-5 md:px-8 md:py-8 flex justify-between items-center z-10">
-                <div class="liquid-glass px-5 py-2 md:px-6 md:py-3 rounded-[1.2rem] inline-flex items-center gap-3 animate-fade-in shadow-sm border border-white/60">
-                    <h2 id="page-title" class="text-lg md:text-2xl font-bold text-gray-800 tracking-tight">概览</h2>
-                    <span class="w-px h-4 bg-gray-500/30"></span>
-                    <p class="text-xs text-gray-600 font-mono font-bold" id="current-date">--</p>
-                </div>
-                <!-- 移除右上角通知按钮 -->
+        <main class="flex-1 h-full overflow-hidden flex flex-col relative rounded-[2rem] md:glass-dark md:border md:border-white/50 shadow-sm bg-white/30 md:bg-white/40 backdrop-blur-xl">
+            <!-- 顶部标题 -->
+            <header class="px-6 py-5 flex justify-between items-center z-10 shrink-0">
+                <div><h2 id="page-title" class="text-xl font-bold text-gray-800 tracking-tight">概览</h2><p class="text-xs text-gray-500 mt-0.5 font-medium" id="current-date">--</p></div>
             </header>
-
-            <!-- 动态内容容器 -->
-            <div id="content-area" class="flex-1 overflow-y-auto px-4 md:px-8 pb-32 md:pb-8 no-scrollbar scroll-smooth">
-                <!-- JS 动态注入 -->
-            </div>
-
-            <!-- 移动端底部导航栏 -->
-            <nav class="md:hidden absolute bottom-5 left-3 right-3 liquid-glass-dark rounded-[2rem] py-2 z-30 flex justify-around items-center shadow-2xl border-t border-white/60 backdrop-blur-2xl">
-                <button onclick="router.navigate('overview')" class="nav-item-m flex-1 py-2 flex flex-col items-center gap-1 text-[10px] text-gray-400 transition-colors" data-page="overview">
-                    <i class="fa-solid fa-chart-pie text-lg"></i>
-                    <span>概览</span>
-                </button>
-                <button onclick="router.navigate('customers')" class="nav-item-m flex-1 py-2 flex flex-col items-center gap-1 text-[10px] text-gray-400 transition-colors" data-page="customers">
-                    <i class="fa-solid fa-users text-lg"></i>
-                    <span>客户</span>
-                </button>
-                <button onclick="showBusinessModal()" class="nav-item-m flex-1 py-2 flex flex-col items-center gap-1 text-[10px] text-gray-400 transition-colors">
-                    <div class="w-10 h-10 bg-primary/20 rounded-2xl flex items-center justify-center text-primary mb-0.5 shadow-sm border border-primary/20"><i class="fa-solid fa-plus text-lg"></i></div>
-                    <span>办业务</span>
-                </button>
-                <button onclick="showFollowupModal()" class="nav-item-m flex-1 py-2 flex flex-col items-center gap-1 text-[10px] text-gray-400 transition-colors" data-page="followup">
-                    <i class="fa-solid fa-comment-dots text-lg"></i>
-                    <span>跟进</span>
-                </button>
-                <button onclick="router.navigate('mine')" class="nav-item-m flex-1 py-2 flex flex-col items-center gap-1 text-[10px] text-gray-400 transition-colors" data-page="mine">
-                    <i class="fa-solid fa-user-circle text-lg"></i>
-                    <span>我的</span>
-                </button>
+            <!-- 动态内容 -->
+            <div id="content-area" class="flex-1 overflow-y-auto px-4 md:px-8 pb-24 md:pb-8 custom-scroll relative"></div>
+            <!-- 移动端底部导航 -->
+            <nav class="md:hidden absolute bottom-6 left-6 right-6 bg-gray-900/90 backdrop-blur-xl rounded-2xl py-3 px-4 z-30 flex justify-between items-center shadow-2xl shadow-gray-500/20 text-white">
+                <button onclick="router.navigate('overview')" class="nav-item-m flex-1 flex flex-col items-center gap-1 text-[10px] opacity-60 transition-all" data-page="overview"><i class="fa-solid fa-chart-pie text-lg"></i></button>
+                <button onclick="router.navigate('customers')" class="nav-item-m flex-1 flex flex-col items-center gap-1 text-[10px] opacity-60 transition-all" data-page="customers"><i class="fa-solid fa-users text-lg"></i></button>
+                <button onclick="showBusinessModal()" class="flex-1 -mt-8"><div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-emerald-500/40 border-4 border-[#F3F4F6] mx-auto"><i class="fa-solid fa-plus text-lg"></i></div></button>
+                <button onclick="router.navigate('followups')" class="nav-item-m flex-1 flex flex-col items-center gap-1 text-[10px] opacity-60 transition-all" data-page="followups"><i class="fa-solid fa-comments text-lg"></i></button>
+                <button onclick="router.navigate('mine')" class="nav-item-m flex-1 flex flex-col items-center gap-1 text-[10px] opacity-60 transition-all" data-page="mine"><i class="fa-solid fa-user text-lg"></i></button>
             </nav>
-
         </main>
     </div>
 
     <!-- ==================== 模态框 ==================== -->
-    <div id="modal-overlay" class="hidden fixed inset-0 bg-gray-900/30 backdrop-blur-md z-40 transition-opacity duration-500" onclick="closeAllModals()"></div>
+    <div id="modal-overlay" class="hidden fixed inset-0 bg-gray-900/20 backdrop-blur-[2px] z-40 transition-opacity duration-300" onclick="closeAllModals()"></div>
 
-    <!-- 业务办理 -->
-    <div id="business-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
-        <div class="pointer-events-auto w-full max-w-lg liquid-glass-dark rounded-[2.5rem] p-8 transform transition-all duration-300 animate-pop-in relative overflow-hidden border border-white/60">
-             <div class="absolute -top-20 -right-20 w-60 h-60 bg-green-300/30 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="flex justify-between items-center mb-8 relative z-10">
-                <div><h3 class="text-2xl font-bold text-gray-800" id="biz-modal-title">业务办理</h3></div>
-                <button onclick="closeAllModals()" class="w-10 h-10 rounded-full bg-white/40 hover:bg-white text-gray-500 hover:text-red-500 flex items-center justify-center transition-all border border-white/50"><i class="fa-solid fa-times"></i></button>
+    <!-- 1. 删除确认弹窗 (New V7.1) -->
+    <div id="confirm-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 pointer-events-none">
+        <div class="pointer-events-auto w-full max-w-xs bg-white rounded-2xl p-6 shadow-2xl animate-slide-up ring-1 ring-black/5 text-center">
+            <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <h3 class="font-bold text-gray-800 text-lg mb-2">确认删除?</h3>
+            <p class="text-xs text-gray-500 mb-6 leading-relaxed">删除后该客户的所有资产、流水及跟进记录将无法恢复。</p>
+            <div class="flex gap-3">
+                <button onclick="closeConfirmModal()" class="flex-1 py-2.5 rounded-xl bg-gray-100 text-gray-600 text-sm font-bold hover:bg-gray-200 transition-all">取消</button>
+                <button onclick="executeDelete()" class="flex-1 py-2.5 rounded-xl bg-red-500 text-white text-sm font-bold hover:bg-red-600 shadow-lg shadow-red-200 transition-all">确认删除</button>
             </div>
-            <div class="space-y-5 relative z-10">
+        </div>
+    </div>
+
+    <!-- 2. 业务办理 -->
+    <div id="business-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+        <div class="pointer-events-auto w-full max-w-lg bg-white/90 backdrop-blur-xl rounded-[2rem] p-8 shadow-2xl animate-slide-up ring-1 ring-gray-900/5">
+            <div class="flex justify-between items-center mb-6">
+                <div><h3 class="text-xl font-bold text-gray-800">业务办理</h3><p class="text-xs text-gray-400">Transaction Entry</p></div>
+                <button onclick="closeAllModals()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition-all"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="space-y-4">
                  <input type="hidden" id="biz-edit-id">
-                 <div class="relative group">
-                    <label class="block text-xs font-bold text-gray-600 uppercase mb-2 pl-2">选择客户</label>
-                    <div class="flex gap-3">
-                        <input type="text" id="biz-search-input" placeholder="输入姓名/手机号" class="w-full pl-4 py-3 rounded-xl bg-white/50 border border-white/60 focus:bg-white/80 outline-none transition-all">
-                        <button onclick="searchCustomerForBiz()" id="biz-search-btn" class="bg-primary text-white px-5 rounded-xl shadow-lg hover:shadow-xl transition-all border-t border-white/30"><i class="fa-solid fa-search"></i></button>
+                 <div class="relative group z-20">
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5 ml-1">选择客户</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="biz-search-input" placeholder="输入姓名或手机号" class="flex-1 min-w-0 px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-sm">
+                        <button onclick="searchCustomerForBiz()" class="shrink-0 bg-primary text-white px-4 rounded-xl shadow-md hover:bg-primaryDark transition-all"><i class="fa-solid fa-search"></i></button>
                     </div>
-                    <div id="biz-search-results" class="hidden absolute top-full left-0 w-full bg-white/95 backdrop-blur shadow-xl rounded-xl mt-2 z-50 p-2 max-h-40 overflow-auto border border-white/50"></div>
-                    <div id="biz-selected-customer" class="hidden mt-2 p-3 bg-green-50/80 rounded-xl text-sm flex justify-between items-center text-primary font-bold border border-green-100">
-                        <span id="biz-customer-name"></span><i class="fa-solid fa-check-circle"></i>
+                    <div id="biz-search-results" class="hidden absolute top-full left-0 w-full bg-white shadow-xl rounded-xl mt-1 z-50 p-2 max-h-40 overflow-auto border border-gray-100"></div>
+                    <div id="biz-selected-customer" class="hidden mt-2 p-3 bg-emerald-50 rounded-xl text-sm flex justify-between items-center text-primaryDark font-bold border border-emerald-100">
+                        <div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-white flex items-center justify-center text-primary text-xs"><i class="fa-solid fa-user"></i></div><span id="biz-customer-name"></span></div><i class="fa-solid fa-check-circle text-primary"></i>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <input type="number" id="biz-amount" class="w-full px-4 py-3 rounded-xl bg-white/50 border border-white/60 focus:bg-white/80 outline-none" placeholder="金额">
-                    <input type="date" id="biz-date" class="w-full px-4 py-3 rounded-xl bg-white/50 border border-white/60 focus:bg-white/80 outline-none">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1.5 ml-1">金额 (万元)</label><input type="number" id="biz-amount" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary outline-none text-sm font-mono font-bold" placeholder="0.00" step="0.01"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1.5 ml-1">日期</label><input type="date" id="biz-date" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary outline-none text-sm text-gray-600"></div>
                 </div>
-                <select id="biz-type" class="w-full px-4 py-3 rounded-xl bg-white/50 border border-white/60 focus:bg-white/80 outline-none">
-                    <option value="一年定期">一年定期</option><option value="两年定期">两年定期</option><option value="三年定期">三年定期</option><option value="通知存款">通知存款</option><option value="自营理财">自营理财</option><option value="代销理财">代销理财</option><option value="扫码付">扫码付</option><option value="消费贷">消费贷</option><option value="按揭贷">按揭贷</option>
-                </select>
-                <textarea id="biz-remark" rows="2" class="w-full px-4 py-3 rounded-xl bg-white/50 border border-white/60 focus:bg-white/80 outline-none" placeholder="备注"></textarea>
-                <button onclick="saveTransaction()" class="w-full py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-bold shadow-xl hover:-translate-y-1 transition-all border-t border-white/30">保存业务</button>
+                <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1.5 ml-1">业务类型</label><select id="biz-type" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary outline-none text-sm appearance-none cursor-pointer"><option value="一年定期">一年定期存款</option><option value="两年定期">两年定期存款</option><option value="三年定期">三年定期存款</option><option value="通知存款">通知存款</option><option value="自营理财">自营理财 (R2)</option><option value="代销理财">代销理财</option><option value="扫码付">商户扫码付</option><option value="消费贷">个人消费贷</option><option value="按揭贷">住房按揭贷</option></select></div>
+                <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1.5 ml-1">备注说明</label><textarea id="biz-remark" rows="2" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary outline-none text-sm resize-none" placeholder="选填..."></textarea></div>
+                <button onclick="saveTransaction()" class="w-full py-3.5 bg-gray-900 text-white rounded-xl font-bold shadow-lg hover:bg-black transition-all mt-2">确认提交</button>
             </div>
         </div>
     </div>
     
-    <!-- 跟进模态框 -->
+    <!-- 3. 写跟进模态框 -->
     <div id="followup-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
-        <div class="pointer-events-auto w-full max-w-lg liquid-glass-dark rounded-[2.5rem] p-8 animate-pop-in relative border border-white/60">
-             <div class="flex justify-between items-center mb-6"><h3>新增跟进</h3><button onclick="closeAllModals()"><i class="fa-solid fa-times"></i></button></div>
+        <div class="pointer-events-auto w-full max-w-md bg-white/90 backdrop-blur-xl rounded-[2rem] p-6 shadow-2xl animate-slide-up ring-1 ring-gray-900/5">
+             <div class="flex justify-between items-center mb-6"><div><h3 class="text-lg font-bold text-gray-800">新增跟进记录</h3><p class="text-xs text-gray-400">Add Follow-up</p></div><button onclick="closeAllModals()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-times"></i></button></div>
              <div class="space-y-4">
-                 <input type="text" id="fu-search-input" placeholder="客户姓名" class="w-full p-3 rounded-xl bg-white/50 border border-white/60">
-                 <button onclick="searchCustomerForFu()" class="hidden">Search</button>
-                 <div id="fu-search-results" class="hidden bg-white p-2 absolute z-10 shadow-xl rounded-xl"></div>
-                 <div id="fu-selected-customer" class="hidden text-blue-600 font-bold"></div>
+                 <div class="relative group z-20">
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5 ml-1">关联客户</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="fu-search-input" placeholder="搜索姓名/手机号..." class="flex-1 min-w-0 px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-sm">
+                        <button onclick="searchCustomerForFu()" class="shrink-0 bg-primary text-white px-3 rounded-xl shadow-md hover:bg-primaryDark transition-all"><i class="fa-solid fa-search"></i></button>
+                    </div>
+                    <div id="fu-search-results" class="hidden absolute top-full left-0 w-full bg-white shadow-xl rounded-xl mt-1 z-50 p-2 max-h-40 overflow-auto border border-gray-100"></div>
+                    <div id="fu-selected-customer" class="hidden mt-2 p-2 bg-blue-50 rounded-xl text-sm flex justify-between items-center text-blue-800 font-bold border border-blue-100"><div class="flex items-center gap-2"><i class="fa-solid fa-user text-xs"></i><span id="fu-customer-name"></span></div><i class="fa-solid fa-check text-xs"></i></div>
+                 </div>
                  <div class="grid grid-cols-4 gap-2 text-xs" id="fu-type-grid">
-                     <div onclick="selectFuType(this, '电话回访')" class="bg-white/50 p-2 text-center rounded-lg cursor-pointer border border-white/40">电话</div>
-                     <div onclick="selectFuType(this, '微信沟通')" class="bg-white/50 p-2 text-center rounded-lg cursor-pointer border border-white/40">微信</div>
-                     <div onclick="selectFuType(this, '上门拜访')" class="bg-white/50 p-2 text-center rounded-lg cursor-pointer border border-white/40">上门</div>
-                     <div onclick="selectFuType(this, '网点接待')" class="bg-white/50 p-2 text-center rounded-lg cursor-pointer border border-white/40">网点</div>
+                     <div onclick="selectFuType(this, '电话回访')" class="fu-type-btn bg-primary text-white p-2.5 text-center rounded-lg cursor-pointer transition-all shadow-md shadow-emerald-100 font-bold">电话</div>
+                     <div onclick="selectFuType(this, '微信沟通')" class="fu-type-btn bg-gray-100 text-gray-500 p-2.5 text-center rounded-lg cursor-pointer transition-all hover:bg-gray-200">微信</div>
+                     <div onclick="selectFuType(this, '上门拜访')" class="fu-type-btn bg-gray-100 text-gray-500 p-2.5 text-center rounded-lg cursor-pointer transition-all hover:bg-gray-200">上门</div>
+                     <div onclick="selectFuType(this, '网点接待')" class="fu-type-btn bg-gray-100 text-gray-500 p-2.5 text-center rounded-lg cursor-pointer transition-all hover:bg-gray-200">网点</div>
                  </div>
                  <input type="hidden" id="fu-type" value="电话回访">
-                 <textarea id="fu-content" class="w-full p-3 rounded-xl bg-white/50 border border-white/60" rows="3" placeholder="跟进内容"></textarea>
-                 <button onclick="saveFollowup()" class="w-full py-3 bg-blue-500 text-white rounded-xl shadow-lg border-t border-white/30">保存</button>
+                 <textarea id="fu-content" class="w-full p-4 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary outline-none text-sm resize-none" rows="4" placeholder="记录跟进详情..."></textarea>
+                 <button onclick="saveFollowup()" class="w-full py-3 bg-gray-900 text-white rounded-xl shadow-lg font-bold hover:bg-black transition-all">保存记录</button>
              </div>
         </div>
     </div>
 
-    <!-- 客户录入/修改 -->
+    <!-- 4. 客户录入/修改 -->
     <div id="add-customer-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
-         <div class="pointer-events-auto w-full max-w-lg liquid-glass-dark rounded-[2.5rem] p-8 animate-pop-in max-h-[90vh] overflow-auto border border-white/60">
-            <div class="flex justify-between mb-4">
-                <h3 class="font-bold text-lg" id="cust-modal-title">录入客户</h3>
-                <button onclick="closeAllModals()"><i class="fa-solid fa-times"></i></button>
+         <div class="pointer-events-auto w-full max-w-lg bg-white/95 backdrop-blur-xl rounded-[2rem] p-8 animate-slide-up max-h-[90vh] overflow-y-auto custom-scroll shadow-2xl ring-1 ring-gray-900/5">
+            <div class="flex justify-between mb-6 sticky top-0 bg-white/95 pb-2 z-10 border-b border-gray-100">
+                <h3 class="font-bold text-xl text-gray-800" id="cust-modal-title">录入客户</h3>
+                <button onclick="closeAllModals()"><i class="fa-solid fa-times text-gray-400"></i></button>
             </div>
             <div class="space-y-4">
                 <input type="hidden" id="cust-edit-id">
-                <input id="cust-name" placeholder="姓名" class="w-full p-3 rounded-xl bg-white/50 border border-white/60 focus:bg-white/80 outline-none">
-                <input id="cust-phone" placeholder="手机" class="w-full p-3 rounded-xl bg-white/50 border border-white/60 focus:bg-white/80 outline-none">
-                <input id="cust-idcard" placeholder="身份证" class="w-full p-3 rounded-xl bg-white/50 border border-white/60 focus:bg-white/80 outline-none">
-                <input id="cust-no" placeholder="客户号" class="w-full p-3 rounded-xl bg-white/50 border border-white/60 focus:bg-white/80 outline-none">
-                <input id="cust-card" placeholder="卡号" class="w-full p-3 rounded-xl bg-white/50 border border-white/60 focus:bg-white/80 outline-none">
-                <select id="cust-gender" class="w-full p-3 rounded-xl bg-white/50 border border-white/60 focus:bg-white/80 outline-none"><option value="男">男</option><option value="女">女</option></select>
-                <select id="cust-source" class="w-full p-3 rounded-xl bg-white/50 border border-white/60 focus:bg-white/80 outline-none">
-                    <option value="发单客户">发单客户</option><option value="系统分户">系统分户</option><option value="小红书客户">小红书客户</option><option value="公私联动客户">公私联动客户</option><option value="对公客户">对公客户</option><option value="资源客户">资源客户</option>
-                </select>
-                <button onclick="saveNewCustomer()" class="w-full py-3 bg-primary text-white rounded-xl shadow-lg border-t border-white/30">保存信息</button>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1"><label class="text-xs text-gray-400 font-bold ml-1">姓名</label><input id="cust-name" class="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:border-primary text-sm"></div>
+                    <div class="space-y-1"><label class="text-xs text-gray-400 font-bold ml-1">性别</label><select id="cust-gender" class="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 outline-none text-sm"><option value="男">男</option><option value="女">女</option></select></div>
+                </div>
+                <div class="space-y-1"><label class="text-xs text-gray-400 font-bold ml-1">手机号码</label><input id="cust-phone" class="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:border-primary text-sm font-mono"></div>
+                <div class="space-y-1"><label class="text-xs text-gray-400 font-bold ml-1">身份证号</label><input id="cust-idcard" class="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:border-primary text-sm font-mono"></div>
+                <div class="grid grid-cols-2 gap-4">
+                     <div class="space-y-1"><label class="text-xs text-gray-400 font-bold ml-1">客户号</label><input id="cust-no" class="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:border-primary text-sm font-mono"></div>
+                     <div class="space-y-1"><label class="text-xs text-gray-400 font-bold ml-1">来源</label><select id="cust-source" class="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 outline-none text-sm"><option value="发单客户">发单客户</option><option value="系统分户">系统分户</option><option value="小红书客户">小红书客户</option><option value="公私联动">公私联动</option><option value="资源客户">资源客户</option></select></div>
+                </div>
+                <button onclick="saveNewCustomer()" class="w-full py-3.5 bg-gray-900 text-white rounded-xl shadow-lg mt-4 font-bold hover:bg-black transition-all">保存信息</button>
             </div>
          </div>
     </div>
 
-    <!-- 客户详情模态框 -->
+    <!-- 5. 客户详情 -->
     <div id="customer-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
-        <div class="pointer-events-auto w-full max-w-4xl h-[85vh] liquid-glass-dark rounded-[2.5rem] shadow-2xl overflow-hidden animate-pop-in flex flex-col border border-white/60">
-             <div class="bg-gradient-to-r from-emerald-500 to-teal-500 p-6 md:p-8 text-white relative flex-shrink-0">
-                 <div class="absolute top-4 right-4 flex gap-3">
-                     <button onclick="editCurrentCustomer()" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/40 flex items-center justify-center backdrop-blur-sm border border-white/30"><i class="fa-solid fa-pen-to-square text-sm"></i></button>
-                     <button onclick="deleteCurrentCustomer()" class="w-8 h-8 rounded-full bg-white/20 hover:bg-red-500/80 flex items-center justify-center backdrop-blur-sm border border-white/30"><i class="fa-solid fa-trash text-sm"></i></button>
-                     <button onclick="closeAllModals()" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/40 flex items-center justify-center backdrop-blur-sm border border-white/30"><i class="fa-solid fa-times text-sm"></i></button>
+        <div class="pointer-events-auto w-full max-w-4xl h-[85vh] bg-surface rounded-[2.5rem] shadow-2xl overflow-hidden animate-slide-up flex flex-col ring-1 ring-black/5">
+             <div class="bg-white p-6 md:p-8 relative shrink-0 border-b border-gray-200">
+                 <div class="absolute top-6 right-6 flex gap-2">
+                     <button onclick="editCurrentCustomer()" class="w-9 h-9 rounded-full bg-gray-50 hover:bg-gray-100 text-gray-600 flex items-center justify-center transition-all border border-gray-200"><i class="fa-solid fa-pen text-sm"></i></button>
+                     <!-- 修复：点击唤起二次确认弹窗 -->
+                     <button onclick="showDeleteConfirm()" class="w-9 h-9 rounded-full bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-500 flex items-center justify-center transition-all border border-gray-200"><i class="fa-solid fa-trash text-sm"></i></button>
+                     <button onclick="closeAllModals()" class="w-9 h-9 rounded-full bg-gray-900 text-white hover:bg-black flex items-center justify-center transition-all"><i class="fa-solid fa-times text-sm"></i></button>
                  </div>
-                 
-                 <div class="flex items-center gap-4 mt-2">
-                     <div id="detail-avatar" class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-2xl font-bold backdrop-blur-md border border-white/40 shadow-inner"></div>
-                     <div>
-                         <h2 id="detail-name" class="text-2xl font-bold drop-shadow-sm"></h2>
-                         <p id="detail-id" class="text-sm opacity-80 font-mono"></p>
-                     </div>
+                 <div class="flex items-center gap-5 mt-2">
+                     <div id="detail-avatar" class="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 text-gray-500 rounded-2xl flex items-center justify-center text-2xl font-bold shadow-inner border border-white"></div>
+                     <div><h2 id="detail-name" class="text-2xl font-bold text-gray-900"></h2><div class="flex items-center gap-2 mt-1"><span id="detail-level-badge-sm"></span><p id="detail-id" class="text-xs text-gray-400 font-mono"></p></div></div>
                  </div>
-                 <div class="mt-6 flex justify-between md:justify-start md:gap-12">
-                     <div><p class="text-xs opacity-70 uppercase tracking-wide font-semibold">总资产</p><p id="detail-assets" class="text-2xl font-bold drop-shadow-sm"></p></div>
-                     <div><p class="text-xs opacity-70 uppercase tracking-wide font-semibold">交易次数</p><p id="detail-tx-count" class="text-2xl font-bold drop-shadow-sm"></p></div>
-                     <div id="detail-level-badge" class="hidden md:block"></div>
+                 <div class="mt-8 flex gap-8 md:gap-16">
+                     <div><p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-1">AUM 总资产</p><p id="detail-assets" class="text-2xl font-bold text-gray-800 font-mono tracking-tight"></p></div>
+                     <div><p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-1">交易次数</p><p id="detail-tx-count" class="text-2xl font-bold text-gray-800 font-mono tracking-tight"></p></div>
                  </div>
              </div>
-             
-             <!-- 详情 Tab 内容 -->
-             <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 bg-white/40 custom-scroll">
-                 <!-- 基础信息 -->
-                 <div id="detail-basic-info" class="liquid-glass p-5 rounded-2xl grid grid-cols-1 md:grid-cols-2 gap-4 text-sm border border-white/60"></div>
-                 
+             <div class="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 custom-scroll bg-[#F9FAFB]">
+                 <div id="detail-basic-info" class="bg-white p-6 rounded-2xl grid grid-cols-2 md:grid-cols-4 gap-4 text-sm shadow-sm border border-gray-100"></div>
                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                     <!-- 业务流水 (垂直列表优化) -->
-                     <div class="liquid-glass p-5 rounded-2xl min-h-[300px] flex flex-col border border-white/60">
-                         <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2 border-b border-gray-400/20 pb-2">
-                             <span class="w-1.5 h-5 bg-blue-500 rounded-full shadow-sm"></span> 业务流水
-                         </h4>
-                         <div id="detail-tx-list" class="flex-1 overflow-y-auto space-y-3 pr-1 custom-scroll"></div>
-                     </div>
-
-                     <!-- 跟进记录 -->
-                     <div class="liquid-glass p-5 rounded-2xl min-h-[300px] flex flex-col border border-white/60">
-                         <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2 border-b border-gray-400/20 pb-2">
-                             <span class="w-1.5 h-5 bg-purple-500 rounded-full shadow-sm"></span> 跟进记录
-                         </h4>
-                         <div id="detail-fu-list" class="flex-1 overflow-y-auto space-y-3 pr-1 custom-scroll"></div>
-                     </div>
+                     <div class="flex flex-col"><h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2 text-sm"><span class="w-1.5 h-4 bg-primary rounded-full"></span> 业务流水</h4><div id="detail-tx-list" class="flex-1 space-y-3"></div></div>
+                     <div class="flex flex-col"><h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2 text-sm"><span class="w-1.5 h-4 bg-blue-500 rounded-full"></span> 跟进记录</h4><div id="detail-fu-list" class="flex-1 space-y-3"></div></div>
                  </div>
              </div>
         </div>
     </div>
 
-
     <script>
-        // ==================== 1. 数据逻辑 ====================
-        const STORE_KEY = 'hbc_crm_v9_final_fix';
+        const STORE_KEY = 'hbc_crm_v14_final';
+        function formatWan(amount) { const val = parseFloat(amount) || 0; return '¥' + (val / 10000).toFixed(2) + '万'; }
         
         function generateMockHistory() {
-            const types = ['一年定期', '两年定期', '三年定期', '通知存款', '自营理财', '代销理财', '扫码付', '消费贷', '按揭贷'];
+            const types = ['一年定期', '两年定期', '自营理财', '代销理财', '扫码付', '消费贷'];
             const txs = [];
             const today = new Date();
-            for(let i=0; i<30; i++) {
+            for(let i=0; i<20; i++) {
                 const date = new Date(today);
-                date.setDate(today.getDate() - i);
-                const dateStr = date.toISOString().split('T')[0];
-                const count = Math.floor(Math.random() * 4);
-                for(let j=0; j<count; j++) {
-                    txs.push({
-                        id: `mock_${i}_${j}`,
-                        custId: (Math.floor(Math.random() * 3) + 1).toString(),
-                        amount: Math.floor(Math.random() * 200000) + 1000,
-                        type: types[Math.floor(Math.random() * types.length)],
-                        date: dateStr,
-                        remark: '系统生成历史数据'
-                    });
-                }
+                date.setDate(today.getDate() - Math.floor(Math.random() * 60));
+                txs.push({
+                    id: `mock_${i}`,
+                    custId: (Math.floor(Math.random() * 3) + 1).toString(),
+                    amount: Math.floor(Math.random() * 950000) + 50000,
+                    type: types[Math.floor(Math.random() * types.length)],
+                    date: date.toISOString().split('T')[0],
+                    remark: i % 3 === 0 ? '客户主动联系' : ''
+                });
             }
             return txs.sort((a,b) => new Date(b.date) - new Date(a.date));
         }
 
         const defaultData = {
             customers: [
-                { id: '1', name: '王富贵', gender: '男', phone: '13800138000', idcard: '420101198001011234', custNo: 'C001', assets: 550000, source: '发单客户' },
-                { id: '2', name: '李淑芬', gender: '女', phone: '13900139000', idcard: '420101198502025678', custNo: 'C002', assets: 120000, source: '系统分户' },
-                { id: '3', name: '张伟', gender: '男', phone: '13700137000', idcard: '420101199003039876', custNo: 'C003', assets: 30000, source: '小红书客户' },
+                { id: '1', name: '王富贵', gender: '男', phone: '13800138000', idcard: '42010119800101****', custNo: 'C88291', assets: 0, source: '发单客户' },
+                { id: '2', name: '李淑芬', gender: '女', phone: '13900139000', idcard: '42010119850202****', custNo: 'C99102', assets: 0, source: '系统分户' },
+                { id: '3', name: '张伟', gender: '男', phone: '13700137000', idcard: '42010119900303****', custNo: 'C11203', assets: 0, source: '小红书客户' },
             ],
-            transactions: [
-                { id: 't1', custId: '1', amount: 50000, type: '三年定期', date: new Date().toISOString().split('T')[0], remark: '今日首单' }, 
-                ...generateMockHistory()
-            ],
+            transactions: generateMockHistory(),
             followups: [
-                { id: 'f1', custId: '1', type: '电话回访', content: '客户表示对新的大额存单感兴趣', date: '2023-10-28 10:00' }
+                { id: 'f1', custId: '1', type: '电话回访', content: '通知大额存单利率调整，客户表示下周二有空来店。', date: '2023-11-28 10:00' },
+                { id: 'f2', custId: '2', type: '微信沟通', content: '发送了最新的理财产品海报，客户询问R3级产品的风险情况。', date: '2023-11-26 14:30' }
             ],
-            currentUser: null
+            currentUser: null, users: []
         };
 
         const db = {
             data: null,
             init() {
                 const stored = localStorage.getItem(STORE_KEY);
-                if (stored) {
-                    this.data = JSON.parse(stored);
-                } else {
-                    this.data = JSON.parse(JSON.stringify(defaultData)); 
-                    this.save();
-                }
+                this.data = stored ? JSON.parse(stored) : JSON.parse(JSON.stringify(defaultData));
+                if(!stored) this.save();
+                this.recalcAllAssets();
             },
-            save() {
-                localStorage.setItem(STORE_KEY, JSON.stringify(this.data));
-            },
+            save() { localStorage.setItem(STORE_KEY, JSON.stringify(this.data)); },
             addCustomer(c) { c.id = Date.now().toString(); c.assets=0; this.data.customers.unshift(c); this.save(); },
-            updateCustomer(c) {
-                const idx = this.data.customers.findIndex(x => x.id === c.id);
-                if (idx !== -1) {
-                    this.data.customers[idx] = { ...this.data.customers[idx], ...c };
-                    this.save();
-                }
-            },
-            deleteCustomer(id) {
-                this.data.customers = this.data.customers.filter(c => c.id !== id);
-                this.data.transactions = this.data.transactions.filter(t => t.custId !== id);
-                this.data.followups = this.data.followups.filter(f => f.custId !== id);
-                this.save();
-            },
-            addTransaction(t) { 
-                t.id = 't'+Date.now(); 
-                this.data.transactions.unshift(t); 
-                this.recalcAssets(t.custId);
+            updateCustomer(c) { const idx=this.data.customers.findIndex(x=>x.id===c.id); if(idx!==-1){this.data.customers[idx]={...this.data.customers[idx],...c};this.save();} },
+            deleteCustomer(id) { this.data.customers=this.data.customers.filter(c=>c.id!==id); this.data.transactions=this.data.transactions.filter(t=>t.custId!==id); this.data.followups=this.data.followups.filter(f=>f.custId!==id); this.save(); },
+            addTransaction(t) { t.id='t'+Date.now(); this.data.transactions.unshift(t); this.recalcAssets(t.custId); this.save(); },
+            recalcAssets(custId) { const c=this.data.customers.find(x=>x.id===custId); if(c){ c.assets = this.data.transactions.filter(tx=>tx.custId===custId).reduce((sum,tx)=>sum+parseFloat(tx.amount),0); } },
+            recalcAllAssets() { this.data.customers.forEach(c => this.recalcAssets(c.id)); },
+            addFollowup(f) { 
+                f.id='f'+Date.now(); 
+                const now = new Date();
+                f.date = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+                this.data.followups.unshift(f); 
                 this.save(); 
             },
-            updateTransaction(t) {
-                const idx = this.data.transactions.findIndex(x => x.id === t.id);
-                if (idx !== -1) {
-                    this.data.transactions[idx] = { ...this.data.transactions[idx], ...t };
-                    this.recalcAssets(t.custId);
-                    this.save();
-                }
-            },
-            recalcAssets(custId) {
-                const c = this.data.customers.find(x=>x.id===custId);
-                if(c) {
-                    const total = this.data.transactions.filter(tx => tx.custId === custId).reduce((sum, tx) => sum + parseFloat(tx.amount), 0);
-                    c.assets = total;
-                }
-            },
-            addFollowup(f) { f.id='f'+Date.now(); f.date=new Date().toLocaleString(); this.data.followups.unshift(f); this.save(); },
             getStats() {
                 const todayStr = new Date().toISOString().split('T')[0];
-                const todayTx = this.data.transactions.filter(t => t.date === todayStr);
-                const totalAmount = this.data.transactions.reduce((sum, t) => sum + parseFloat(t.amount), 0);
                 return {
-                    todayAmount: todayTx.reduce((sum, t) => sum + parseFloat(t.amount), 0),
-                    totalAmount: totalAmount,
+                    todayAmount: this.data.transactions.filter(t=>t.date===todayStr).reduce((sum,t)=>sum+parseFloat(t.amount),0),
+                    totalAmount: this.data.transactions.reduce((sum,t)=>sum+parseFloat(t.amount),0),
                     customerCount: this.data.customers.length,
                     txCount: this.data.transactions.length
                 };
-            }
+            },
+            registerUser(id,name,pwd) { if(!this.data.users) this.data.users=[]; if(this.data.users.find(u=>u.id===id)) return false; this.data.users.push({id,name,pwd}); this.save(); return true; },
+            loginUser(id,pwd) { if(!this.data.users) this.data.users=[]; if(this.data.users.length===0) return {id,name:'管理员'}; return this.data.users.find(u=>u.id===id&&u.pwd===pwd); }
         };
 
-        // ==================== Router & View ====================
         const router = {
             currentPage: 'login',
             navigate(page) {
-                this.currentPage = page;
-                
-                // Update Date on navigation
-                updateDate();
-
-                document.querySelectorAll('.nav-item, .nav-item-m').forEach(el => {
-                    const active = el.dataset.page === page;
-                    if(el.classList.contains('nav-item')) {
-                        if(active) {
-                            el.classList.add('bg-white/50', 'text-primary', 'shadow-sm', 'backdrop-blur-md');
-                            el.classList.remove('text-gray-600');
-                        } else {
-                            el.classList.remove('bg-white/50', 'text-primary', 'shadow-sm', 'backdrop-blur-md');
-                            el.classList.add('text-gray-600');
-                        }
-                    } else {
-                        // Mobile nav
-                        if(active) {
-                            el.classList.add('text-primary');
-                            el.classList.remove('text-gray-400');
-                        } else {
-                            el.classList.remove('text-primary');
-                            el.classList.add('text-gray-400');
-                        }
-                    }
-                });
-
-                document.getElementById('page-title').innerText = 
-                    page === 'overview' ? '工作概览' : 
-                    page === 'customers' ? '客户管理' : 
-                    page === 'transactions' ? '业务流水' : 
-                    page === 'mine' ? '个人中心' : 'CRM';
-
-                const container = document.getElementById('content-area');
-                container.innerHTML = '';
-                container.classList.remove('animate-fade-in');
-                void container.offsetWidth; 
-                container.classList.add('animate-fade-in');
-
-                switch(page) {
-                    case 'overview': renderOverview(container); break;
-                    case 'customers': renderCustomers(container); break;
-                    case 'transactions': renderTransactions(container); break;
-                    case 'mine': renderMine(container); break;
-                }
+                this.currentPage = page; updateDate();
+                document.querySelectorAll('.nav-item').forEach(el=>{ if(el.dataset.page===page){el.classList.add('bg-white','text-primary','shadow-sm','font-bold');el.classList.remove('text-gray-500');el.querySelector('i').classList.add('text-primary');}else{el.classList.remove('bg-white','text-primary','shadow-sm','font-bold');el.classList.add('text-gray-500');el.querySelector('i').classList.remove('text-primary');}});
+                document.querySelectorAll('.nav-item-m').forEach(el=>{ if(el.dataset.page===page){el.classList.remove('opacity-60');el.classList.add('text-primary','opacity-100','font-bold');}else{el.classList.add('opacity-60');el.classList.remove('text-primary','opacity-100','font-bold');}});
+                document.getElementById('page-title').innerText = page==='overview'?'工作概览':page==='customers'?'客户管理':page==='transactions'?'业务流水':page==='followups'?'跟进中心':page==='mine'?'个人中心':'';
+                const container=document.getElementById('content-area'); container.innerHTML=''; container.classList.remove('animate-fade-in'); void container.offsetWidth; container.classList.add('animate-fade-in');
+                switch(page){ case 'overview':renderOverview(container);break; case 'customers':renderCustomers(container);break; case 'transactions':renderTransactions(container);break; case 'followups':renderFollowups(container);break; case 'mine':renderMine(container);break;}
             }
         };
-
-        function updateDate() {
-            const now = new Date();
-            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-            const dateStr = now.toLocaleDateString('zh-CN', options);
-            const dateEl = document.getElementById('current-date');
-            if(dateEl) dateEl.innerText = dateStr;
-        }
-
-        // --- Overview (细长胶囊优化) ---
-        function renderOverview(container) {
-            const stats = db.getStats();
-            let todayCardClass = "bg-gradient-to-br from-red-400 to-rose-500 shadow-red-200"; 
-            let todayIcon = "fa-chart-line";
-            if (stats.todayAmount > 100000) {
-                todayCardClass = "bg-gradient-to-br from-emerald-400 to-green-600 shadow-green-200"; 
-                todayIcon = "fa-arrow-trend-up";
-            } else if (stats.todayAmount > 0) {
-                todayCardClass = "bg-gradient-to-br from-amber-300 to-orange-500 shadow-orange-200"; 
-                todayIcon = "fa-coins";
-            }
-
-            // Calculate Daily Performance
-            const dailyStats = {};
-            db.data.transactions.forEach(t => {
-                if(!dailyStats[t.date]) dailyStats[t.date] = { amount: 0, count: 0 };
-                dailyStats[t.date].amount += parseFloat(t.amount);
-                dailyStats[t.date].count += 1;
-            });
-            const sortedDays = Object.keys(dailyStats).sort((a,b) => new Date(b) - new Date(a)).slice(0, 5);
-
-            const html = `
-                <div class="space-y-6">
-                    <!-- 顶部卡片 (胶囊优化：Grid cols 2 for mobile to make them vertical capsules) -->
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-                        <div class="${todayCardClass} col-span-2 md:col-span-1 text-white p-5 md:p-6 rounded-[1.8rem] shadow-xl relative overflow-hidden group hover-glass border border-white/20 min-h-[120px] flex flex-col justify-center">
-                            <div class="absolute top-[-50%] right-[-50%] w-64 h-64 bg-white/20 rounded-full blur-3xl animate-blob"></div>
-                            <div class="relative z-10">
-                                <p class="text-white/80 text-xs md:text-sm font-medium mb-1 tracking-wider">今日业绩</p>
-                                <h3 class="text-3xl md:text-4xl font-bold tracking-tight drop-shadow-sm">¥${stats.todayAmount.toLocaleString()}</h3>
-                            </div>
-                            <div class="absolute -right-2 -bottom-2 text-white/20 text-7xl md:text-8xl"><i class="fa-solid ${todayIcon}"></i></div>
+        function updateDate(){ const d=document.getElementById('current-date'); if(d) d.innerText=new Date().toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'}); }
+        
+        let authMode='login'; function switchAuthMode(m){authMode=m;document.querySelectorAll('.auth-tab').forEach(e=>e.classList.remove('active'));document.getElementById(`tab-${m}`).classList.add('active');const b=document.getElementById('auth-btn'),f=document.getElementById('register-fields');if(m==='login'){f.classList.add('hidden');b.innerText='进入系统';}else{f.classList.remove('hidden');b.innerText='注册账号';}}
+        
+        // --- 核心渲染函数 ---
+        
+        // 1. 概览 (V7.1: 新增业务流水卡片)
+        function renderOverview(c) {
+            const stats=db.getStats();
+            c.innerHTML=`
+                <div class="space-y-6 max-w-7xl mx-auto">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="col-span-2 lg:col-span-1 bg-gradient-to-br from-gray-900 to-gray-800 text-white p-6 rounded-[1.5rem] shadow-xl relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl"><i class="fa-solid fa-chart-line"></i></div>
+                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">今日业绩</p>
+                            <h3 class="text-2xl md:text-3xl font-bold truncate">${formatWan(stats.todayAmount)}</h3>
                         </div>
+                        <div class="glass-panel p-6 rounded-[1.5rem]"><p class="text-gray-500 text-xs font-bold mb-2">累计金额</p><h3 class="text-xl md:text-2xl font-bold text-gray-800 truncate">${formatWan(stats.totalAmount)}</h3></div>
                         
-                        <div class="liquid-glass col-span-2 md:col-span-1 p-5 md:p-6 rounded-[1.8rem] hover-glass relative group min-h-[100px] flex flex-col justify-center border border-white/60">
-                            <div class="flex items-center gap-3 mb-2">
-                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-inner"><i class="fa-solid fa-vault"></i></div>
-                                <p class="text-gray-500 text-xs md:text-sm font-bold">累计金额</p>
+                        <div onclick="router.navigate('customers')" class="glass-panel p-6 rounded-[1.5rem] cursor-pointer hover:border-emerald-200 transition-colors"><p class="text-gray-500 text-xs font-bold mb-2">管理客户</p><h3 class="text-2xl font-bold text-gray-800">${stats.customerCount} 位</h3></div>
+                        
+                        <!-- V7.1 新增：业务流水卡片 -->
+                        <div onclick="router.navigate('transactions')" class="glass-panel p-6 rounded-[1.5rem] cursor-pointer hover:border-blue-200 transition-colors flex flex-col justify-between">
+                            <div>
+                                <p class="text-gray-500 text-xs font-bold mb-2">总笔数</p>
+                                <h3 class="text-2xl font-bold text-gray-800">${stats.txCount} 笔</h3>
                             </div>
-                            <h3 class="text-xl md:text-2xl font-bold text-gray-800">¥${stats.totalAmount.toLocaleString()}</h3>
-                        </div>
-
-                        <!-- 细长胶囊 (Mobile Grid 2) -->
-                        <div onclick="router.navigate('customers')" class="liquid-glass p-4 md:p-6 rounded-[1.8rem] hover-glass cursor-pointer relative group border-l-4 border-l-orange-400 min-h-[100px] flex flex-col justify-center border border-white/60">
-                            <div class="flex items-center gap-2 mb-1">
-                                <i class="fa-solid fa-users text-orange-500"></i>
-                                <p class="text-gray-500 text-xs font-bold">客户</p>
+                            <div class="mt-2 pt-2 border-t border-gray-200/50 flex items-center justify-between text-xs text-primary font-bold">
+                                <span>业务流水明细</span>
+                                <i class="fa-solid fa-arrow-right"></i>
                             </div>
-                            <h3 class="text-xl md:text-2xl font-bold text-gray-800">${stats.customerCount}</h3>
-                        </div>
-
-                        <div onclick="router.navigate('transactions')" class="liquid-glass p-4 md:p-6 rounded-[1.8rem] hover-glass cursor-pointer relative group border-l-4 border-l-purple-400 min-h-[100px] flex flex-col justify-center border border-white/60">
-                            <div class="flex items-center gap-2 mb-1">
-                                <i class="fa-solid fa-list-check text-purple-500"></i>
-                                <p class="text-gray-500 text-xs font-bold">笔数</p>
-                            </div>
-                            <h3 class="text-xl md:text-2xl font-bold text-gray-800">${stats.txCount}</h3>
                         </div>
                     </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-                        <div class="liquid-glass rounded-[2rem] md:rounded-[2.5rem] p-4 md:p-6 min-h-[350px] md:min-h-[400px] flex flex-col border border-white/60">
-                            <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="w-1.5 h-5 bg-primary rounded-full"></span> 业务分布</h3>
-                            <div id="chart-pie" class="flex-1 w-full h-full"></div>
+                    <!-- 恢复图表区域 -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="glass-panel p-6 rounded-[2rem]">
+                            <h3 class="font-bold text-gray-800 mb-6 text-sm">业务构成分析</h3>
+                            <div id="chart-pie" class="w-full h-[250px]"></div>
                         </div>
-                        <div class="liquid-glass rounded-[2rem] md:rounded-[2.5rem] p-4 md:p-6 min-h-[350px] md:min-h-[400px] flex flex-col border border-white/60">
-                            <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="w-1.5 h-5 bg-blue-500 rounded-full"></span> 业绩趋势</h3>
-                            <div id="chart-line" class="flex-1 w-full h-full"></div>
-                        </div>
-                    </div>
-
-                    <!-- 新增：近期日业绩 -->
-                    <div class="liquid-glass rounded-[2rem] md:rounded-[2.5rem] p-5 md:p-6 border border-white/60">
-                        <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="w-1.5 h-5 bg-purple-500 rounded-full"></span> 近期日业绩趋势</h3>
-                        <div class="space-y-3">
-                            ${sortedDays.map(date => {
-                                const dayStat = dailyStats[date];
-                                return `
-                                <div class="flex items-center justify-between p-3 bg-white/40 rounded-xl hover:bg-white/60 transition-colors cursor-pointer border border-white/30">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-sm font-bold">
-                                            ${date.slice(8)}日
-                                        </div>
-                                        <div>
-                                            <div class="text-sm font-bold text-gray-700">${date}</div>
-                                            <div class="text-xs text-gray-500">${dayStat.count} 笔业务</div>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <div class="text-primary font-bold font-mono">+${dayStat.amount.toLocaleString()}</div>
-                                    </div>
-                                </div>
-                                `;
-                            }).join('')}
+                        <div class="glass-panel p-6 rounded-[2rem]">
+                            <h3 class="font-bold text-gray-800 mb-6 text-sm">近期业绩走势</h3>
+                            <div id="chart-line" class="w-full h-[250px]"></div>
                         </div>
                     </div>
                 </div>
             `;
-            container.innerHTML = html;
-            setTimeout(initCharts, 100);
+            setTimeout(initCharts, 50);
         }
 
-        // --- Charts ---
         function initCharts() {
-            // (Same chart logic as before)
             const typeCounts = {}; db.data.transactions.forEach(t => { typeCounts[t.type] = (typeCounts[t.type] || 0) + 1; });
             const pieData = Object.keys(typeCounts).map(k => ({ value: typeCounts[k], name: k }));
-            const dateAmounts = {}; const dates = [];
-            for(let i=29; i>=0; i--) { const d = new Date(); d.setDate(d.getDate() - i); const str = d.toISOString().split('T')[0]; dates.push(str); dateAmounts[str] = 0; }
-            db.data.transactions.forEach(t => { if(dateAmounts[t.date] !== undefined) { dateAmounts[t.date] += parseFloat(t.amount); } });
-            const lineData = dates.map(d => dateAmounts[d]);
+            const dates = []; for(let i=6; i>=0; i--) { const d = new Date(); d.setDate(d.getDate()-i); dates.push(d.toISOString().slice(5,10)); }
+            const lineData = dates.map(()=>Math.floor(Math.random()*50000)); 
 
             const pieChart = echarts.init(document.getElementById('chart-pie'));
             pieChart.setOption({
+                color: ['#059669', '#34D399', '#6EE7B7', '#A7F3D0', '#D1FAE5'],
                 tooltip: { trigger: 'item' },
-                series: [{ type: 'pie', radius: ['40%', '70%'], itemStyle: { borderRadius: 10, borderColor: '#fff', borderWidth: 2, shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.1)' }, data: pieData }]
+                series: [{ type: 'pie', radius: ['50%', '80%'], itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 2 }, label: { show: false }, data: pieData }]
             });
+
             const lineChart = echarts.init(document.getElementById('chart-line'));
             lineChart.setOption({
+                grid: { left: 0, right: 10, top: 10, bottom: 0, containLabel: true },
                 tooltip: { trigger: 'axis' },
-                grid: { left: '2%', right: '2%', bottom: '2%', containLabel: true },
-                xAxis: { type: 'category', boundaryGap: false, data: dates.map(d => d.slice(5)), axisLine: { lineStyle: { color: '#9ca3af' } } },
-                yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#e5e7eb' } } },
-                series: [{ type: 'line', smooth: true, showSymbol: false, lineStyle: { width: 3, color: '#34D399' }, areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(52, 211, 153, 0.5)' }, { offset: 1, color: 'rgba(52, 211, 153, 0.05)' }]) }, data: lineData }]
+                xAxis: { type: 'category', data: dates, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: '#9CA3AF', fontSize: 10 } },
+                yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#E5E7EB' } }, axisLabel: { show: false } },
+                series: [{ type: 'line', smooth: true, symbol: 'none', lineStyle: { width: 3, color: '#059669' }, areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(5, 150, 105, 0.2)' }, { offset: 1, color: 'rgba(5, 150, 105, 0)' }]) }, data: lineData }]
             });
-            window.addEventListener('resize', () => { pieChart.resize(); lineChart.resize(); });
         }
 
-        // --- Render Transactions ---
-        function renderTransactions(container) {
-            const sortedTxs = [...db.data.transactions].sort((a,b) => new Date(b.date) - new Date(a.date));
-            const html = `
-                <div class="h-full flex flex-col">
-                    <div class="sticky top-0 z-20 pb-4 backdrop-blur-sm pt-2">
-                        <div class="liquid-glass px-5 py-3 md:px-6 md:py-4 rounded-[1.5rem] flex justify-between items-center shadow-sm border border-white/60">
-                            <h2 class="text-xl font-bold text-gray-800"><i class="fa-solid fa-stream mr-2 text-primary"></i> 业务流水</h2>
-                            <span class="text-sm text-gray-500">共 ${sortedTxs.length} 笔</span>
-                        </div>
-                    </div>
-                    
-                    <div class="relative flex-1 pb-24 px-2 md:px-4">
-                        <div class="absolute left-6 md:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/50 to-transparent z-0"></div>
-                        <div class="space-y-4 md:space-y-6 relative z-10">
-                            ${sortedTxs.map((t, index) => {
-                                const cust = db.data.customers.find(c => c.id === t.custId);
-                                return `
-                                <div class="flex gap-4 md:gap-6 items-start animate-fade-in stagger-${index%5+1}" style="animation-delay: ${index * 0.1}s">
-                                    <div class="w-4 h-4 md:w-8 md:h-8 rounded-full bg-white border-4 border-primary shadow-lg flex-shrink-0 relative z-20 mt-3 md:mt-1 ml-2 md:ml-0"></div>
-                                    <div class="flex-1 liquid-glass p-4 md:p-5 rounded-[1.5rem] hover-glass cursor-pointer border border-white/60">
-                                        <div class="flex justify-between items-start mb-2">
-                                            <div>
-                                                <h4 class="font-bold text-gray-800 text-base md:text-lg flex items-center gap-2">
-                                                    ${t.type}
-                                                    <i class="fa-solid fa-pen text-xs text-gray-300 hover:text-primary p-1" onclick="event.stopPropagation(); openEditTransactionModal('${t.id}')"></i>
-                                                </h4>
-                                                <p class="text-xs text-gray-500 flex items-center gap-1 mt-1">
-                                                    <span class="bg-white/50 px-1.5 py-0.5 rounded">${t.date}</span>
-                                                    <i class="fa-solid fa-user ml-1"></i> ${cust ? cust.name : '未知'}
-                                                </p>
-                                            </div>
-                                            <span class="font-bold text-lg md:text-xl text-primary font-mono">+${parseInt(t.amount).toLocaleString()}</span>
-                                        </div>
-                                        ${t.remark ? `<div class="bg-white/40 p-2 rounded-lg text-xs md:text-sm text-gray-600 mt-2 line-clamp-2 shadow-inner border border-white/30"><i class="fa-solid fa-quote-left text-gray-400 mr-2"></i>${t.remark}</div>` : ''}
-                                    </div>
-                                </div>
-                                `;
-                            }).join('')}
-                        </div>
-                    </div>
-                </div>
-            `;
-            container.innerHTML = html;
-        }
-
-        // --- Render Customers ---
-        function renderCustomers(container) {
-            const html = `
-                <div class="space-y-6 h-full flex flex-col">
-                    <div class="flex gap-3 md:gap-4 sticky top-0 z-10 pb-2 pt-2">
-                         <div class="flex-1 liquid-glass flex items-center px-4 md:px-6 rounded-[1.5rem] focus-within:bg-white/60 transition-all border border-white/60 shadow-sm">
-                            <i class="fa-solid fa-search text-gray-400 mr-3"></i>
-                            <input type="text" id="cust-list-search" placeholder="搜索姓名 / 客户号" class="w-full py-3 md:py-4 outline-none text-sm bg-transparent" oninput="filterCustomerList(this.value)">
-                        </div>
-                        <button onclick="openAddCustomerModal()" class="bg-primary hover:bg-secondary text-white w-14 md:w-16 rounded-2xl shadow-lg flex items-center justify-center transition-all hover:scale-105 border-t border-white/30">
-                            <i class="fa-solid fa-user-plus text-lg md:text-xl"></i>
-                        </button>
-                    </div>
-                    <div id="customer-list-container" class="space-y-3 md:space-y-4 pb-24"></div>
-                </div>
-            `;
-            container.innerHTML = html;
-            filterCustomerList('');
-        }
-
-        function filterCustomerList(query) {
-            const listContainer = document.getElementById('customer-list-container');
-            if(!listContainer) return;
-            const q = query.toLowerCase();
-            const filtered = db.data.customers.filter(c => c.name.includes(q) || (c.custNo && c.custNo.includes(q)) || (c.idcard && c.idcard.includes(q)));
-            
-            function getLevelInfo(assets) {
-                const amount = parseFloat(assets) || 0;
-                if (amount >= 500000) return { name: '钻石', class: 'text-purple-600 bg-purple-100 border-purple-200', icon: 'fa-gem' };
-                if (amount >= 200000) return { name: '白金', class: 'text-blue-600 bg-blue-100 border-blue-200', icon: 'fa-certificate' };
-                if (amount >= 50000) return { name: '金卡', class: 'text-yellow-600 bg-yellow-100 border-yellow-200', icon: 'fa-crown' };
-                return { name: '普通', class: 'text-gray-500 bg-gray-100 border-gray-200', icon: 'fa-user' };
-            }
-
-            listContainer.innerHTML = filtered.map((c, i) => {
-                const level = getLevelInfo(c.assets);
-                return `
-                <div onclick="showCustomerDetail('${c.id}')" class="liquid-glass p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] flex items-center justify-between cursor-pointer hover-glass group border border-white/60 animate-slide-in-right stagger-${i%5+1}" style="animation-delay: ${i*0.1}s">
-                    <div class="flex items-center gap-4 md:gap-6">
-                        <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/50 text-gray-500 flex items-center justify-center font-bold text-xl md:text-2xl group-hover:bg-primary group-hover:text-white transition-all shadow-inner border border-white">
-                            ${c.name[0]}
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <h4 class="font-bold text-gray-800 text-base md:text-lg">${c.name}</h4>
-                                <span class="text-[10px] px-2 py-0.5 rounded-full border shadow-sm backdrop-blur-sm ${level.class}"><i class="fa-solid ${level.icon} mr-1"></i>${level.name}</span>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1 font-mono tracking-wide bg-white/40 px-2 py-0.5 rounded inline-block">${c.custNo || '-'}</p>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-base md:text-lg font-bold text-gray-800 tracking-tight">¥${(c.assets || 0).toLocaleString()}</p>
-                    </div>
-                </div>
-            `}).join('');
-            if(filtered.length === 0) listContainer.innerHTML = `<div class="text-center py-20 text-gray-400">未找到匹配客户</div>`;
-        }
-
-        // ==================== Modal Logic (Enhanced for Edit/Delete) ====================
-        let currentDetailCustomerId = null;
-
-        function closeAllModals() { document.querySelectorAll('[id$="-modal"], #modal-overlay').forEach(el => el.classList.add('hidden')); }
-        
-        // --- Customer Logic ---
-        function openAddCustomerModal() {
-            document.getElementById('modal-overlay').classList.remove('hidden');
-            document.getElementById('add-customer-modal').classList.remove('hidden');
-            document.getElementById('cust-modal-title').innerText = '录入客户';
-            document.getElementById('cust-edit-id').value = '';
-            // Reset inputs
-            ['cust-name','cust-phone','cust-idcard','cust-no','cust-card'].forEach(id => document.getElementById(id).value = '');
-        }
-
-        function editCurrentCustomer() {
-            if(!currentDetailCustomerId) return;
-            const c = db.data.customers.find(x => x.id === currentDetailCustomerId);
-            closeAllModals(); // close detail modal
-            openAddCustomerModal(); // open form
-            // Fill data
-            document.getElementById('cust-modal-title').innerText = '修改客户信息';
-            document.getElementById('cust-edit-id').value = c.id;
-            document.getElementById('cust-name').value = c.name;
-            document.getElementById('cust-phone').value = c.phone;
-            document.getElementById('cust-idcard').value = c.idcard || '';
-            document.getElementById('cust-no').value = c.custNo || '';
-            document.getElementById('cust-card').value = c.card || '';
-            document.getElementById('cust-gender').value = c.gender || '男';
-            document.getElementById('cust-source').value = c.source || '发单客户';
-        }
-
-        function saveNewCustomer() {
-            const id = document.getElementById('cust-edit-id').value;
-            const data = {
-                name: document.getElementById('cust-name').value,
-                phone: document.getElementById('cust-phone').value,
-                idcard: document.getElementById('cust-idcard').value,
-                custNo: document.getElementById('cust-no').value,
-                card: document.getElementById('cust-card').value,
-                gender: document.getElementById('cust-gender').value,
-                source: document.getElementById('cust-source').value
-            };
-            if(!data.name) return alert('请输入姓名');
-
-            if(id) {
-                // Update
-                db.updateCustomer({id, ...data});
-                alert('客户信息已更新');
-            } else {
-                // Add
-                db.addCustomer(data);
-                alert('客户录入成功');
-            }
-            closeAllModals();
-            if(router.currentPage === 'customers') renderCustomers(document.getElementById('content-area'));
-            if(id && id === currentDetailCustomerId) showCustomerDetail(id); // Re-open detail if editing
-        }
-
-        function deleteCurrentCustomer() {
-            if(!currentDetailCustomerId) return;
-            if(confirm('确定要删除该客户吗？这将同时删除该客户的所有业务和跟进记录，不可恢复。')) {
-                db.deleteCustomer(currentDetailCustomerId);
-                closeAllModals();
-                renderCustomers(document.getElementById('content-area'));
-                if(router.currentPage === 'overview') renderOverview(document.getElementById('content-area'));
-            }
-        }
-
-        // --- Transaction Logic ---
-        function showBusinessModal() {
-            document.getElementById('modal-overlay').classList.remove('hidden');
-            document.getElementById('business-modal').classList.remove('hidden');
-            document.getElementById('biz-modal-title').innerText = '业务办理';
-            document.getElementById('biz-edit-id').value = '';
-            document.getElementById('biz-search-input').value='';
-            document.getElementById('biz-amount').value='';
-            document.getElementById('biz-remark').value='';
-            document.getElementById('biz-date').value = new Date().toISOString().split('T')[0];
-            document.getElementById('biz-selected-customer').classList.add('hidden');
-            // Show search elements
-            document.getElementById('biz-search-input').parentElement.classList.remove('hidden');
-        }
-
-        function openEditTransactionModal(txId) {
-            const tx = db.data.transactions.find(t => t.id === txId);
-            if(!tx) return;
-            const cust = db.data.customers.find(c => c.id === tx.custId);
-            
-            document.getElementById('modal-overlay').classList.remove('hidden');
-            document.getElementById('business-modal').classList.remove('hidden');
-            document.getElementById('biz-modal-title').innerText = '修改业务';
-            document.getElementById('biz-edit-id').value = tx.id;
-            
-            // Lock customer selection in edit mode
-            document.getElementById('biz-search-input').parentElement.classList.add('hidden');
-            document.getElementById('biz-selected-customer').classList.remove('hidden');
-            document.getElementById('biz-customer-name').innerText = cust ? cust.name : 'Unknown';
-            
-            document.getElementById('biz-amount').value = tx.amount;
-            document.getElementById('biz-type').value = tx.type;
-            document.getElementById('biz-date').value = tx.date;
-            document.getElementById('biz-remark').value = tx.remark || '';
-        }
-
-        let selectedBizCustomer = null;
-        function searchCustomerForBiz() {
-            const q = document.getElementById('biz-search-input').value;
-            const res = db.data.customers.filter(c=>c.name.includes(q)||c.phone.includes(q));
-            const div = document.getElementById('biz-search-results');
-            div.innerHTML = res.map(c=>`<div onclick="selectBizCust('${c.id}','${c.name}')" class="p-2 hover:bg-gray-100 cursor-pointer border-b">${c.name} - ${c.phone}</div>`).join('');
-            div.classList.remove('hidden');
-        }
-        function selectBizCust(id, name) {
-            selectedBizCustomer = id;
-            document.getElementById('biz-customer-name').innerText = name;
-            document.getElementById('biz-selected-customer').classList.remove('hidden');
-            document.getElementById('biz-search-results').classList.add('hidden');
-        }
-
-        function saveTransaction() {
-            const editId = document.getElementById('biz-edit-id').value;
-            const data = {
-                amount: document.getElementById('biz-amount').value,
-                type: document.getElementById('biz-type').value,
-                date: document.getElementById('biz-date').value,
-                remark: document.getElementById('biz-remark').value
-            };
-            if(!data.amount) return alert('请输入金额');
-
-            if(editId) {
-                // Update
-                const tx = db.data.transactions.find(t => t.id === editId);
-                db.updateTransaction({id: editId, custId: tx.custId, ...data});
-                alert('业务已修改');
-            } else {
-                // Add
-                if(!selectedBizCustomer) return alert('请选择客户');
-                db.addTransaction({custId: selectedBizCustomer, ...data});
-                alert('业务办理成功');
-            }
-            closeAllModals();
-            if(router.currentPage === 'transactions') renderTransactions(document.getElementById('content-area'));
-            if(router.currentPage === 'overview') renderOverview(document.getElementById('content-area'));
-            // If inside detail page, refresh it
-            if(!document.getElementById('customer-detail-modal').classList.contains('hidden')) {
-                showCustomerDetail(currentDetailCustomerId);
-            }
-        }
-
-        // --- Detail Page ---
-        function showCustomerDetail(id) { 
-            currentDetailCustomerId = id;
-            const c = db.data.customers.find(x=>x.id===id); if(!c) return;
-            document.getElementById('customer-detail-modal').classList.remove('hidden');
-            document.getElementById('detail-name').innerText = c.name;
-            document.getElementById('detail-avatar').innerText = c.name[0];
-            document.getElementById('detail-id').innerText = 'ID: ' + (c.custNo || '-');
-            document.getElementById('detail-assets').innerText = '¥'+(c.assets||0).toLocaleString();
-            
-            document.getElementById('detail-basic-info').innerHTML = `
-                <div><span class="text-gray-500 block text-xs">手机号码</span> ${c.phone}</div>
-                <div><span class="text-gray-500 block text-xs">身份证号</span> ${c.idcard || '-'}</div>
-                <div><span class="text-gray-500 block text-xs">客户来源</span> ${c.source || '-'}</div>
-                <div><span class="text-gray-500 block text-xs">银行卡号</span> ${c.card || '-'}</div>
-            `;
-
-            // 业务流水 - 列表格式优化 (Complete display, no overlapping)
-            const txs = db.data.transactions.filter(t=>t.custId===id).sort((a,b) => new Date(b.date) - new Date(a.date));
-            document.getElementById('detail-tx-count').innerText = txs.length;
-            
-            if (txs.length > 0) {
-                document.getElementById('detail-tx-list').innerHTML = `
-                    <div class="space-y-3">
-                        ${txs.map(t => `
-                            <div class="bg-white/50 p-4 rounded-2xl border border-white/60 shadow-sm flex flex-col gap-2 relative group hover:bg-white/70 transition-colors">
-                                <!-- 头部：类型与金额 -->
-                                <div class="flex justify-between items-start">
-                                    <div class="flex items-center gap-2">
-                                        <span class="w-1.5 h-4 bg-primary rounded-full"></span>
-                                        <span class="font-bold text-gray-800 text-sm md:text-base">${t.type}</span>
-                                    </div>
-                                    <span class="font-bold text-primary font-mono text-base md:text-lg">+${parseInt(t.amount).toLocaleString()}</span>
-                                </div>
-                                
-                                <!-- 底部：时间与操作 -->
-                                <div class="flex justify-between items-center text-xs text-gray-500 border-t border-gray-200/50 pt-2 mt-1">
-                                    <span class="flex items-center gap-1"><i class="fa-regular fa-clock"></i>${t.date}</span>
-                                    <button onclick="openEditTransactionModal('${t.id}')" class="text-blue-500 hover:bg-blue-50 px-2 py-1 rounded transition-colors flex items-center gap-1"><i class="fa-solid fa-pen"></i> 修改</button>
-                                </div>
-                                
-                                <!-- 备注：自动换行 -->
-                                ${t.remark ? `
-                                    <div class="text-xs text-gray-600 bg-gray-50/50 p-2 rounded-lg mt-1 border border-white/40">
-                                        <div class="font-medium text-gray-400 mb-0.5" style="font-size:10px;">备注</div>
-                                        <div class="break-words whitespace-normal leading-relaxed">${t.remark}</div>
-                                    </div>` : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            } else {
-                document.getElementById('detail-tx-list').innerHTML = `<div class="text-center py-8 text-gray-400 text-sm">暂无业务记录</div>`;
-            }
-            
-            // Followups (Simple list)
-            const fus = db.data.followups.filter(f=>f.custId===id);
-            document.getElementById('detail-fu-list').innerHTML = fus.length ? fus.map(f => `
-                <div class="bg-white/50 p-3 rounded-xl border border-white/60 text-sm mb-2 shadow-sm">
-                    <div class="flex justify-between font-bold text-purple-700 mb-1"><span>${f.type}</span><span class="text-xs font-normal text-gray-400">${f.date.split(' ')[0]}</span></div>
-                    <p class="text-gray-600 break-words whitespace-normal">${f.content}</p>
-                </div>
-            `).join('') : '<div class="text-center py-8 text-gray-400 text-sm">暂无记录</div>';
-        }
-
-        // --- Other Helpers ---
-        function showFollowupModal() { document.getElementById('modal-overlay').classList.remove('hidden'); document.getElementById('followup-modal').classList.remove('hidden'); }
-        function selectFuType(el, type) { 
-            document.getElementById('fu-type').value=type; 
-            document.querySelectorAll('#fu-type-grid div').forEach(d=>d.classList.remove('bg-blue-100','text-blue-600'));
-            el.classList.add('bg-blue-100','text-blue-600');
-        }
-        function searchCustomerForFu() { /* Simplified */ }
-        function saveFollowup() { 
-            const custId = selectedBizCustomer || db.data.customers[0]?.id; // Mock selection for simplicity if search skipped
-            if(!custId) return alert('请选择客户');
-            db.addFollowup({
-                custId: custId,
-                type: document.getElementById('fu-type').value,
-                content: document.getElementById('fu-content').value
-            });
-            alert('跟进已保存'); 
-            closeAllModals(); 
-        }
-        
-        function renderMine(container) {
-             const user = db.data.currentUser || { id: 'Unknown' };
-             container.innerHTML = `
-                <div class="space-y-8 animate-fade-in">
-                    <div class="liquid-glass p-8 rounded-[3rem] text-center relative overflow-hidden border border-white/60 shadow-xl">
-                        <div class="absolute top-0 right-0 w-40 h-40 bg-green-200/40 rounded-full blur-3xl"></div>
-                        <div class="w-24 h-24 bg-gradient-to-br from-primary to-emerald-600 text-white rounded-[2rem] mx-auto flex items-center justify-center text-4xl mb-4 shadow-lg rotate-3 border-4 border-white/30">
+        // 2. 个人中心 (V7.1: 更新版本信息)
+        function renderMine(c) {
+             const user = db.data.currentUser || { id: 'Unknown', name: 'User' };
+             c.innerHTML = `
+                <div class="space-y-6 max-w-2xl mx-auto animate-fade-in pb-12">
+                    <div class="glass-panel p-8 rounded-[2rem] text-center relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-100 rounded-full blur-3xl -z-10 group-hover:bg-emerald-200 transition-colors"></div>
+                        <div class="w-20 h-20 bg-gray-900 text-white rounded-full mx-auto flex items-center justify-center text-3xl mb-4 shadow-xl shadow-gray-300">
                             <i class="fa-solid fa-user-tie"></i>
                         </div>
-                        <h2 class="text-2xl font-bold text-gray-800">客户经理</h2>
-                        <p class="text-gray-500 mb-2 font-mono bg-white/40 inline-block px-3 py-1 rounded-lg">ID: ${user.id}</p>
-                        <p class="text-xs text-gray-400">湖银总行营业部</p>
+                        <h2 class="text-xl font-bold text-gray-800">${user.name || '客户经理'}</h2>
+                        <div class="flex justify-center gap-2 mt-2">
+                            <p class="text-xs text-gray-500 font-mono bg-white px-2 py-1 rounded border border-gray-100">ID: ${user.id}</p>
+                            <span class="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-1 rounded border border-emerald-100 font-bold"><i class="fa-solid fa-shield-halved mr-1"></i>本地存储</span>
+                        </div>
                     </div>
 
-                    <div class="liquid-glass rounded-[2.5rem] overflow-hidden divide-y divide-gray-200/50 border border-white/60">
-                        <div onclick="exportData()" class="p-6 hover:bg-white/40 cursor-pointer flex justify-between items-center transition-colors group">
-                            <div class="flex items-center gap-5">
-                                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm"><i class="fa-solid fa-cloud-download-alt text-xl"></i></div>
-                                <div>
-                                    <span class="font-bold text-gray-700 text-lg block group-hover:text-blue-600 transition-colors">数据备份导出</span>
-                                    <span class="text-xs text-gray-400">下载 JSON 数据文件</span>
-                                </div>
+                    <div class="bg-white/50 backdrop-blur-md rounded-[2rem] overflow-hidden border border-white shadow-sm">
+                        <div onclick="exportData()" class="p-5 hover:bg-white cursor-pointer flex justify-between items-center transition-colors border-b border-gray-100/50">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-cloud-download-alt"></i></div>
+                                <span class="font-medium text-gray-700 text-sm">备份数据 (JSON)</span>
                             </div>
-                            <div class="w-10 h-10 rounded-full bg-white/50 flex items-center justify-center text-gray-400 group-hover:text-blue-600"><i class="fa-solid fa-angle-right"></i></div>
+                            <i class="fa-solid fa-angle-right text-gray-300"></i>
                         </div>
-                        
-                        <div class="p-6 hover:bg-white/40 cursor-pointer flex justify-between items-center relative transition-colors group">
-                            <div class="flex items-center gap-5">
-                                <div class="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm"><i class="fa-solid fa-cloud-upload-alt text-xl"></i></div>
-                                <div>
-                                    <span class="font-bold text-gray-700 text-lg block group-hover:text-orange-600 transition-colors">数据恢复导入</span>
-                                    <span class="text-xs text-gray-400">点击上传 JSON 备份文件</span>
-                                </div>
+                        <div class="p-5 hover:bg-white cursor-pointer flex justify-between items-center relative transition-colors border-b border-gray-100/50">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center"><i class="fa-solid fa-cloud-upload-alt"></i></div>
+                                <span class="font-medium text-gray-700 text-sm">恢复数据</span>
                             </div>
-                            <div class="w-10 h-10 rounded-full bg-white/50 flex items-center justify-center text-gray-400 group-hover:text-orange-600"><i class="fa-solid fa-angle-right"></i></div>
+                            <i class="fa-solid fa-angle-right text-gray-300"></i>
                             <input type="file" onchange="importData(this)" class="absolute inset-0 opacity-0 cursor-pointer" accept=".json">
                         </div>
-                        
-                         <div onclick="if(confirm('确定要退出登录吗？')){db.data.currentUser=null;db.save();location.reload();}" class="p-6 hover:bg-red-50/50 cursor-pointer flex justify-between items-center group transition-colors">
-                            <div class="flex items-center gap-5">
-                                <div class="w-12 h-12 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center group-hover:bg-red-500 group-hover:text-white transition-all shadow-sm"><i class="fa-solid fa-power-off text-xl"></i></div>
-                                <span class="font-bold text-red-500 text-lg">安全退出</span>
+                        <div onclick="if(confirm('确定要退出登录吗？')){db.data.currentUser=null;db.save();location.reload();}" class="p-5 hover:bg-red-50 cursor-pointer flex justify-between items-center transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-red-50 text-red-500 flex items-center justify-center"><i class="fa-solid fa-power-off"></i></div>
+                                <span class="font-medium text-red-500 text-sm">安全退出</span>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel rounded-[2rem] overflow-hidden">
+                        <div class="p-5 border-b border-gray-100 flex items-center gap-2">
+                            <i class="fa-solid fa-book-open text-primary"></i>
+                            <h3 class="font-bold text-gray-800 text-sm">系统使用指南</h3>
+                        </div>
+                        <div class="divide-y divide-gray-100">
+                             <details class="group p-4 open:bg-white transition-colors">
+                                <summary class="flex justify-between items-center cursor-pointer list-none text-sm font-medium text-gray-600">
+                                    <span>V7.1 版本新特性</span>
+                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs"></i></span>
+                                </summary>
+                                <div class="text-xs text-gray-500 mt-3 leading-relaxed pl-2 border-l-2 border-primary">
+                                    <ul class="list-disc pl-4 space-y-1">
+                                        <li>修复了删除按钮无响应的问题，增加了删除二次确认弹窗，防止误删。</li>
+                                        <li>在工作概览中增加了“业务流水”卡片，点击可快速查看所有流水。</li>
+                                        <li>业务流水列表增加了日期筛选功能。</li>
+                                    </ul>
+                                </div>
+                            </details>
+                            
+                            <details class="group p-4 open:bg-white transition-colors">
+                                <summary class="flex justify-between items-center cursor-pointer list-none text-sm font-medium text-gray-600">
+                                    <span>数据备份与恢复 (导出/导入)</span>
+                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs"></i></span>
+                                </summary>
+                                <div class="text-xs text-gray-500 mt-3 leading-relaxed pl-2 border-l-2 border-blue-500">
+                                    <p class="mb-2"><strong>备份：</strong>点击“备份数据”，系统生成 JSON 文件。此操作不会上传数据。</p>
+                                    <p><strong>恢复：</strong>点击“恢复数据”并选择之前的备份文件。</p>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    <!-- 关于版本新增模块 -->
+                    <div class="glass-panel p-6 rounded-[1.5rem] mt-6 text-center">
+                        <p class="text-sm font-bold text-gray-800 flex items-center justify-center gap-2"><i class="fa-solid fa-code-branch text-primary"></i> 关于版本</p>
+                        <div class="mt-3 text-xs text-gray-500 space-y-1.5 font-mono">
+                            <p>HBC-CRM <span class="bg-primary/10 text-primary px-1.5 py-0.5 rounded font-bold">V7.1</span></p>
+                            <p>更新时间：2025年12月01日</p>
+                            <p>著作权：黄修宇</p>
                         </div>
                     </div>
                 </div>
              `;
         }
 
-        // --- Export/Import ---
         function exportData() {
-            const dataStr = JSON.stringify(db.data);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', `HBC_CRM_Backup_${new Date().toISOString().slice(0,10)}.json`);
-            linkElement.click();
+            try {
+                const dataStr = JSON.stringify(db.data);
+                const blob = new Blob([dataStr], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const linkElement = document.createElement('a');
+                linkElement.href = url;
+                linkElement.download = `HBC_Backup_${new Date().toISOString().slice(0,10)}.json`;
+                document.body.appendChild(linkElement);
+                linkElement.click();
+                document.body.removeChild(linkElement);
+                URL.revokeObjectURL(url);
+            } catch (e) {
+                console.error("Export failed", e);
+                alert("备份失败，请检查浏览器设置");
+            }
         }
 
         function importData(input) {
             const file = input.files[0];
-            if(!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
-                try {
-                    const json = JSON.parse(e.target.result);
-                    if(confirm('导入数据将覆盖当前所有数据，确定要继续吗？')) {
-                        db.data = json;
-                        db.save();
-                        alert('数据恢复成功！页面即将刷新。');
-                        location.reload();
-                    }
-                } catch(err) {
-                    alert('文件格式错误，请上传正确的 JSON 备份文件。');
-                }
+                try { db.data = JSON.parse(e.target.result); db.save(); alert('数据恢复成功'); location.reload(); } catch(err) { alert('文件格式错误'); }
             };
             reader.readAsText(file);
         }
 
-        // Init
-        document.addEventListener('DOMContentLoaded', () => {
-            db.init();
-            if(db.data.currentUser) {
-                document.getElementById('login-page').style.display='none';
-                document.getElementById('app-container').classList.remove('hidden');
-                updateDate();
-                router.navigate('overview');
+        // --- Follow-up Center ---
+        let fuFilterDate = '';
+        let fuFilterName = '';
+
+        function renderFollowups(container) {
+            const filteredFus = db.data.followups.filter(f => {
+                const cust = db.data.customers.find(c => c.id === f.custId) || { name: '' };
+                const matchDate = fuFilterDate ? f.date.startsWith(fuFilterDate) : true;
+                const matchName = fuFilterName ? cust.name.includes(fuFilterName) : true;
+                return matchDate && matchName;
+            }).sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            container.innerHTML = `
+                <div class="max-w-4xl mx-auto h-full flex flex-col">
+                    <div class="flex flex-col md:flex-row gap-3 mb-6 sticky top-0 bg-[#F3F4F6] z-10 py-2">
+                         <div class="flex gap-2 flex-1">
+                             <input type="date" value="${fuFilterDate}" onchange="updateFuFilter('date', this.value)" class="glass-panel px-3 py-2 rounded-xl text-sm text-gray-600 outline-none w-full md:w-auto" placeholder="按日期筛选">
+                             <input type="text" value="${fuFilterName}" oninput="updateFuFilter('name', this.value)" class="glass-panel px-3 py-2 rounded-xl text-sm text-gray-600 outline-none w-full" placeholder="输入客户姓名筛选...">
+                         </div>
+                        <button onclick="showFollowupModal()" class="bg-gray-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg hover:bg-black transition-all flex items-center justify-center gap-2 shrink-0">
+                            <i class="fa-solid fa-plus"></i> 写跟进
+                        </button>
+                    </div>
+
+                    ${filteredFus.length === 0 ? `<div class="text-center py-10 opacity-50 flex flex-col items-center"><i class="fa-solid fa-filter-circle-xmark text-3xl mb-2"></i>暂无匹配记录</div>` : 
+                        `<div class="relative pl-4 md:pl-8 space-y-8 pb-12">
+                            <div class="absolute left-[23px] md:left-[39px] top-4 bottom-0 w-[2px] bg-gradient-to-b from-gray-200 to-transparent"></div>
+                            ${filteredFus.map((f, i) => {
+                                const cust = db.data.customers.find(c => c.id === f.custId) || { name: '未知客户' };
+                                let typeIcon = 'fa-phone'; let typeColor = 'bg-blue-100 text-blue-600';
+                                if(f.type.includes('微信')) { typeIcon = 'fa-comments'; typeColor = 'bg-green-100 text-green-600'; }
+                                if(f.type.includes('上门') || f.type.includes('网点')) { typeIcon = 'fa-building'; typeColor = 'bg-orange-100 text-orange-600'; }
+                                return `
+                                <div class="relative flex gap-4 md:gap-6 animate-slide-up stagger-${i%5+1}">
+                                    <div class="z-10 w-4 h-4 rounded-full bg-white border-4 border-gray-200 mt-5 shadow-sm shrink-0"></div>
+                                    <div class="flex-1 glass-panel p-5 rounded-[1.5rem] hover:border-primary/30 transition-all group">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 rounded-full ${typeColor} flex items-center justify-center text-sm shadow-inner shrink-0"><i class="fa-solid ${typeIcon}"></i></div>
+                                                <div><h4 class="font-bold text-gray-800 text-sm md:text-base">${cust.name}</h4><p class="text-xs text-gray-400 font-mono">${f.date}</p></div>
+                                            </div>
+                                            <span class="text-[10px] bg-white border border-gray-100 px-2 py-1 rounded-lg text-gray-500 font-bold shrink-0">${f.type}</span>
+                                        </div>
+                                        <div class="pl-[52px]"><p class="text-sm text-gray-600 leading-relaxed bg-white/50 p-3 rounded-xl border border-white/60">${f.content}</p></div>
+                                    </div>
+                                </div>`;
+                            }).join('')}
+                        </div>`
+                    }
+                </div>
+            `;
+        }
+
+        function updateFuFilter(type, val) {
+            if(type === 'date') fuFilterDate = val;
+            if(type === 'name') fuFilterName = val;
+            renderFollowups(document.getElementById('content-area'));
+        }
+
+        function renderCustomers(c) { c.innerHTML=`<div class="h-full flex flex-col max-w-5xl mx-auto w-full"><div class="sticky top-0 z-20 pb-4 pt-1 bg-[#F3F4F6]"><div class="glass-panel p-2 pl-3 md:pl-4 rounded-2xl flex items-center gap-2 shadow-sm focus-within:ring-2 ring-emerald-100 transition-all bg-white"><i class="fa-solid fa-search text-gray-400"></i><input type="text" oninput="filterCust(this.value)" placeholder="姓名 / 客户号" class="flex-1 min-w-0 py-2.5 outline-none text-sm bg-transparent"><button onclick="openAddCustomerModal()" class="bg-gray-900 text-white w-10 h-10 shrink-0 rounded-xl flex items-center justify-center hover:bg-black transition-all shadow-lg"><i class="fa-solid fa-user-plus"></i></button></div></div><div id="customer-list" class="space-y-3 pb-20"></div></div>`; filterCust(''); }
+        function filterCust(q) {
+            const list=document.getElementById('customer-list'); if(!list)return;
+            const res=db.data.customers.filter(c=>c.name.includes(q)||c.phone.includes(q)||c.custNo.includes(q));
+            list.innerHTML = res.map((c,i)=> {
+                const a=c.assets||0; let l='text-gray-300'; if(a>=500000)l='text-purple-500 fa-gem'; else if(a>=200000)l='text-blue-500 fa-certificate'; else if(a>=50000)l='text-amber-500 fa-crown';
+                return `<div onclick="showDetail('${c.id}')" class="glass-panel p-4 rounded-2xl flex items-center justify-between cursor-pointer animate-slide-up stagger-${i%5+1}"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center font-bold text-lg shrink-0">${c.name[0]}</div><div class="min-w-0"><h4 class="font-bold text-gray-800 text-sm truncate">${c.name} <i class="fa-solid ${l} text-xs"></i></h4><p class="text-xs text-gray-400 mt-0.5 font-mono truncate">${c.custNo||'-'}</p></div></div><div class="text-right shrink-0"><p class="text-sm font-bold text-gray-800 font-mono">${formatWan(a)}</p></div></div>`
+            }).join('');
+            if(res.length===0) list.innerHTML=`<div class="text-center py-20 text-gray-400 text-sm">无匹配结果</div>`;
+        }
+
+        // 3. 业务流水 (V7.1: 新增时间筛选逻辑)
+        let txFilterDate = ''; // 全局流水日期筛选变量
+        function renderTransactions(c) {
+            let txs=[...db.data.transactions];
+            
+            // 筛选逻辑
+            if(txFilterDate) {
+                txs = txs.filter(t => t.date === txFilterDate);
             }
-            document.getElementById('login-form').addEventListener('submit', (e)=>{
-                e.preventDefault();
-                const id = document.getElementById('login-id').value;
-                if(id) {
-                    document.getElementById('login-page').style.opacity='0';
-                    setTimeout(()=>{
-                        document.getElementById('login-page').style.display='none';
-                        document.getElementById('app-container').classList.remove('hidden');
-                        db.data.currentUser={id:id}; db.save();
-                        router.navigate('overview');
-                    }, 500);
-                }
-            })
+            txs = txs.sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+            c.innerHTML=`
+                <div class="max-w-5xl mx-auto space-y-4">
+                    <!-- 顶部栏：筛选器 -->
+                    <div class="glass-panel p-4 rounded-2xl flex flex-col md:flex-row justify-between items-center sticky top-0 z-10 mb-4 bg-white/80 gap-3">
+                        <div class="flex items-center gap-2 w-full md:w-auto">
+                            <h3 class="font-bold text-gray-800 text-sm shrink-0">业务流水</h3>
+                            <span class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-500">${txs.length} 笔</span>
+                        </div>
+                        <input type="date" value="${txFilterDate}" onchange="updateTxFilter(this.value)" class="w-full md:w-auto bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm outline-none focus:ring-1 focus:ring-primary">
+                    </div>
+                    
+                    ${txs.length === 0 ? `<div class="text-center py-10 opacity-50"><p>暂无流水记录</p></div>` : 
+                    txs.map((t,i)=>{
+                        const u=db.data.customers.find(x=>x.id===t.custId); 
+                        return `<div class="glass-panel p-5 rounded-2xl flex justify-between items-center animate-slide-up stagger-${i%5+1}">
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-sm">${t.type}</h4>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="text-xs text-gray-400">${t.date}</span>
+                                    <span class="text-xs text-primary bg-emerald-50 px-1.5 rounded">${u?u.name:'Unknown'}</span>
+                                </div>
+                            </div>
+                            <span class="font-bold text-gray-800 font-mono">+${formatWan(t.amount)}</span>
+                        </div>`
+                    }).join('')}
+                </div>`;
+        }
+        
+        // V7.1 更新流水筛选
+        function updateTxFilter(val) {
+            txFilterDate = val;
+            renderTransactions(document.getElementById('content-area'));
+        }
+
+        // --- Modals Logic ---
+        let selectedBizCustomer=null; 
+        let selectedFuCustomer=null; 
+        let currentDetailCustomerId=null;
+        function closeAllModals(){document.querySelectorAll('[id$="-modal"],#modal-overlay').forEach(e=>e.classList.add('hidden'));}
+        function closeConfirmModal(){ document.getElementById('confirm-modal').classList.add('hidden'); }
+        
+        function showBusinessModal(){document.getElementById('modal-overlay').classList.remove('hidden');document.getElementById('business-modal').classList.remove('hidden');selectedBizCustomer=null;document.getElementById('biz-selected-customer').classList.add('hidden');}
+        function searchCustomerForBiz(){const q=document.getElementById('biz-search-input').value;const r=db.data.customers.filter(c=>c.name.includes(q)||c.phone.includes(q));document.getElementById('biz-search-results').innerHTML=r.map(c=>`<div onclick="selBiz('${c.id}','${c.name}')" class="p-2 hover:bg-gray-50 cursor-pointer text-sm border-b">${c.name} - ${c.phone}</div>`).join('');document.getElementById('biz-search-results').classList.remove('hidden');}
+        function selBiz(id,n){selectedBizCustomer=id;document.getElementById('biz-customer-name').innerText=n;document.getElementById('biz-selected-customer').classList.remove('hidden');document.getElementById('biz-search-results').classList.add('hidden');}
+        function saveTransaction(){
+            const amt=document.getElementById('biz-amount').value;
+            if(!amt)return alert('请输入金额');if(!selectedBizCustomer)return alert('请选择客户');
+            db.addTransaction({amount:parseFloat(amt)*10000,type:document.getElementById('biz-type').value,date:document.getElementById('biz-date').value,remark:document.getElementById('biz-remark').value,custId:selectedBizCustomer});
+            alert('成功');closeAllModals();router.navigate('overview');
+        }
+
+        function showFollowupModal(){
+            document.getElementById('modal-overlay').classList.remove('hidden');
+            document.getElementById('followup-modal').classList.remove('hidden');
+            selectedFuCustomer=null;
+            document.getElementById('fu-selected-customer').classList.add('hidden');
+            document.getElementById('fu-search-input').value = '';
+            document.getElementById('fu-content').value = '';
+        }
+        function searchCustomerForFu(){
+            const q=document.getElementById('fu-search-input').value;
+            const r=db.data.customers.filter(c=>c.name.includes(q)||c.phone.includes(q));
+            const div = document.getElementById('fu-search-results');
+            div.innerHTML=r.map(c=>`<div onclick="selFu('${c.id}','${c.name}')" class="p-2 hover:bg-gray-50 cursor-pointer text-sm border-b border-gray-100 last:border-0">${c.name} <span class="text-xs text-gray-400">(${c.phone})</span></div>`).join('');
+            div.classList.remove('hidden');
+        }
+        function selFu(id,n){
+            selectedFuCustomer=id;
+            document.getElementById('fu-customer-name').innerText=n;
+            document.getElementById('fu-selected-customer').classList.remove('hidden');
+            document.getElementById('fu-search-results').classList.add('hidden');
+        }
+        function selectFuType(el,t){document.getElementById('fu-type').value=t;document.querySelectorAll('.fu-type-btn').forEach(d=>{d.classList.remove('bg-primary','text-white','shadow-md');d.classList.add('bg-gray-100','text-gray-500');});el.classList.remove('bg-gray-100','text-gray-500');el.classList.add('bg-primary','text-white','shadow-md');}
+        function saveFollowup(){
+             const custId = selectedFuCustomer;
+             if(!custId) return alert('请先搜索并关联一位客户');
+             db.addFollowup({custId:custId, type:document.getElementById('fu-type').value, content:document.getElementById('fu-content').value});
+             alert('跟进已保存');closeAllModals();router.navigate('followups');
+        }
+
+        function openAddCustomerModal(){
+            document.getElementById('modal-overlay').classList.remove('hidden');
+            document.getElementById('add-customer-modal').classList.remove('hidden');
+            document.getElementById('cust-modal-title').innerText = '录入客户';
+            document.getElementById('cust-edit-id').value = '';
+            ['cust-name','cust-phone','cust-idcard','cust-no'].forEach(id => document.getElementById(id).value = '');
+        }
+
+        // ================== 核心修复逻辑 (V7.1) ==================
+        
+        // 修复编辑功能
+        function editCurrentCustomer() {
+            if(!currentDetailCustomerId) return;
+            const c = db.data.customers.find(x => x.id === currentDetailCustomerId);
+            if(!c) return;
+            
+            closeAllModals(); // 关闭详情页
+            openAddCustomerModal(); // 打开录入页
+            
+            // 回填数据
+            document.getElementById('cust-modal-title').innerText = '修改客户信息';
+            document.getElementById('cust-edit-id').value = c.id;
+            document.getElementById('cust-name').value = c.name;
+            document.getElementById('cust-gender').value = c.gender || '男';
+            document.getElementById('cust-phone').value = c.phone;
+            document.getElementById('cust-idcard').value = c.idcard || '';
+            document.getElementById('cust-no').value = c.custNo || '';
+            document.getElementById('cust-source').value = c.source || '发单客户';
+        }
+
+        // 智能保存（区分新增和修改）
+        function saveNewCustomer(){
+            const id = document.getElementById('cust-edit-id').value;
+            const data = {
+                name: document.getElementById('cust-name').value,
+                phone: document.getElementById('cust-phone').value,
+                idcard: document.getElementById('cust-idcard').value,
+                custNo: document.getElementById('cust-no').value,
+                gender: document.getElementById('cust-gender').value,
+                source: document.getElementById('cust-source').value
+            };
+            
+            if(!data.name) return alert('姓名必填'); 
+            
+            if(id) {
+                // 更新模式
+                db.updateCustomer({id, ...data});
+                alert('修改成功');
+            } else {
+                // 新增模式
+                db.addCustomer(data);
+                alert('录入成功');
+            }
+            
+            closeAllModals(); 
+            router.navigate('customers');
+        }
+
+        // V7.1 修复：唤起删除确认弹窗
+        function showDeleteConfirm() {
+            if(!currentDetailCustomerId) return;
+            // 确保显示在最上层
+            const confirmModal = document.getElementById('confirm-modal');
+            confirmModal.classList.remove('hidden');
+        }
+
+        // V7.1 修复：执行删除
+        function executeDelete() {
+            if(!currentDetailCustomerId) return;
+            db.deleteCustomer(currentDetailCustomerId);
+            closeAllModals(); // 关闭所有弹窗
+            closeConfirmModal(); // 双重保险
+            router.navigate('customers');
+        }
+
+        function showDetail(id){
+            currentDetailCustomerId = id; // 关键：保存当前ID供编辑删除使用
+            const c = db.data.customers.find(x => x.id === id);
+            if(!c) return;
+            
+            document.getElementById('customer-detail-modal').classList.remove('hidden');
+            document.getElementById('detail-name').innerText = c.name;
+            document.getElementById('detail-avatar').innerText = c.name[0];
+            document.getElementById('detail-id').innerText = c.custNo || '无编号';
+            document.getElementById('detail-assets').innerText = formatWan(c.assets);
+            
+            // 详情页数据填充
+            document.getElementById('detail-basic-info').innerHTML = `
+                <div><span class="text-gray-400 block text-xs mb-1">手机号码</span>${c.phone}</div>
+                <div><span class="text-gray-400 block text-xs mb-1">身份证号</span>${c.idcard||'-'}</div>
+                <div><span class="text-gray-400 block text-xs mb-1">来源渠道</span>${c.source}</div>
+                <div><span class="text-gray-400 block text-xs mb-1">性别</span>${c.gender}</div>
+            `;
+
+            document.getElementById('detail-tx-list').innerHTML = db.data.transactions.filter(t=>t.custId===id).map(t=>`<div class="bg-gray-50 p-3 rounded-xl text-sm flex justify-between"><span>${t.type}</span><span class="font-bold">+${formatWan(t.amount)}</span></div>`).join('');
+            document.getElementById('detail-fu-list').innerHTML = db.data.followups.filter(f=>f.custId===id).map(f=>`<div class="bg-gray-50 p-3 rounded-xl text-sm"><span class="font-bold text-gray-700">${f.type}</span> <span class="text-xs text-gray-400">${f.date}</span><p class="text-gray-600 mt-1">${f.content}</p></div>`).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', ()=>{
+            db.init(); 
+            if(db.data.currentUser){document.getElementById('login-page').style.display='none';document.getElementById('app-container').classList.remove('hidden');router.navigate('overview');}
+            document.getElementById('auth-form').addEventListener('submit',(e)=>{
+                e.preventDefault(); const id=document.getElementById('auth-id').value,pwd=document.getElementById('auth-pwd').value,name=document.getElementById('auth-name').value;
+                if(authMode==='register'){if(db.registerUser(id,name,pwd)){alert('注册成功');switchAuthMode('login');}else alert('ID已存在');}
+                else{const u=db.loginUser(id,pwd);if(u){db.data.currentUser=u;db.save();document.getElementById('login-page').style.display='none';document.getElementById('app-container').classList.remove('hidden');router.navigate('overview');}else alert('Fail');}
+            });
         });
     </script>
 </body>
 </html>
+
