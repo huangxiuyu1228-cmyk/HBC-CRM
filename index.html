@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>湖银客户管理系统 | HBC CRM V9.7 Stable</title>
+    <title>湖银客户管理系统 | HBC CRM V9.9 Enhanced</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
@@ -157,7 +157,7 @@
             </form>
             <div class="mt-8 pt-4 border-t border-gray-200/50 dark:border-gray-700/50 text-center">
                 <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold shadow-sm">
-                    <i class="fa-solid fa-shield-halved"></i> <span>V9.7 Stable | Local Storage</span>
+                    <i class="fa-solid fa-shield-halved"></i> <span>V9.9 Enhanced | Local Storage</span>
                 </div>
             </div>
         </div>
@@ -169,7 +169,7 @@
         <aside class="hidden md:flex flex-col w-64 glass-panel h-full rounded-[2rem] overflow-hidden relative shadow-sm z-20 bg-white/80 dark:bg-gray-800/80">
             <div class="p-8">
                 <h1 class="font-black text-gray-800 dark:text-white text-xl leading-none">HBC CRM</h1>
-                <p class="text-[10px] text-primary font-bold tracking-[0.2em] mt-1">ELITE V9.7</p>
+                <p class="text-[10px] text-primary font-bold tracking-[0.2em] mt-1">ELITE V9.9</p>
             </div>
             <nav class="flex-1 px-4 space-y-1.5 mt-2">
                 <button onclick="router.navigate('overview')" class="nav-item w-full flex items-center gap-3 px-5 py-3.5 rounded-xl transition-all duration-200 text-sm font-medium group text-gray-500 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-700 hover:shadow-sm" data-page="overview"><i class="fa-solid fa-chart-pie w-5 text-center"></i><span>工作概览</span></button>
@@ -265,7 +265,6 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1.5 ml-1">金额 (万元)</label><input type="number" id="biz-amount" class="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:bg-white dark:focus:bg-gray-800 focus:border-primary outline-none text-sm font-mono font-bold dark:text-white" placeholder="0.00" step="0.01"></div>
-                    <!-- Fix: Date Overflow -->
                     <div class="min-w-0 overflow-hidden"><label class="block text-xs font-bold text-gray-500 uppercase mb-1.5 ml-1">日期</label><input type="date" id="biz-date" class="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:bg-white dark:focus:bg-gray-800 focus:border-primary outline-none text-sm text-gray-600 dark:text-gray-300 max-w-full"></div>
                 </div>
                 <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1.5 ml-1">业务类型</label><select id="biz-type" class="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:bg-white dark:focus:bg-gray-800 focus:border-primary outline-none text-sm appearance-none cursor-pointer dark:text-white"><option value="一年定期">一年定期存款</option><option value="两年定期">两年定期存款</option><option value="三年定期">三年定期存款</option><option value="通知存款">通知存款</option><option value="自营理财">自营理财 (R2)</option><option value="代销理财">代销理财</option><option value="扫码付">商户扫码付</option><option value="消费贷">个人消费贷</option><option value="按揭贷">住房按揭贷</option></select></div>
@@ -302,10 +301,9 @@
         </div>
     </div>
 
-    <!-- 客户录入/修改 (Fix: Removed White Block) -->
+    <!-- 客户录入/修改 -->
     <div id="add-customer-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
          <div class="pointer-events-auto w-full max-w-lg bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-[2rem] p-8 animate-slide-up max-h-[90vh] overflow-y-auto custom-scroll shadow-2xl ring-1 ring-gray-900/5">
-            <!-- Fix: Remove white bg, allow transparency -->
             <div class="flex justify-between mb-6 sticky top-0 pb-2 z-10 border-b border-gray-100 dark:border-gray-700 -mx-8 px-8 pt-2 -mt-2 bg-transparent backdrop-blur-xl">
                 <h3 class="font-bold text-xl text-gray-800 dark:text-white" id="cust-modal-title">录入客户</h3>
                 <button onclick="closeAllModals()"><i class="fa-solid fa-times text-gray-400"></i></button>
@@ -327,7 +325,7 @@
          </div>
     </div>
 
-    <!-- 客户详情 (Fix 1: Privacy Mask Fix for InnerHTML) -->
+    <!-- 客户详情 -->
     <div id="customer-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
         <div class="pointer-events-auto w-full max-w-4xl h-[85vh] bg-surface rounded-[2.5rem] shadow-2xl overflow-hidden animate-slide-up flex flex-col ring-1 ring-black/5 dark:ring-white/10 dark:bg-gray-900">
              <div class="bg-white dark:bg-gray-800 p-6 md:p-8 relative shrink-0 border-b border-gray-200 dark:border-gray-700">
@@ -355,59 +353,9 @@
         </div>
     </div>
 
-    <!-- 动态版本/指南 Modal (V9.7) -->
-    <div id="version-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
-        <div class="pointer-events-auto w-full max-w-sm bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-2xl animate-slide-up ring-1 ring-gray-900/5">
-            <div class="text-center mb-4">
-                <div class="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-2 text-xl"><i class="fa-solid fa-code-branch"></i></div>
-                <h3 id="ver-modal-title" class="font-bold text-gray-800 dark:text-white text-lg">信息</h3>
-            </div>
-            <div id="ver-modal-content" class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 text-xs text-gray-600 dark:text-gray-300 space-y-2 mb-6 border border-gray-100 dark:border-gray-700 overflow-y-auto max-h-[60vh] custom-scroll">
-                <!-- Content injected by JS -->
-            </div>
-            <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 text-center text-gray-400 font-medium text-[10px]">著作权人：黄修宇</div>
-            <button onclick="document.getElementById('version-modal').classList.add('hidden')" class="w-full py-2.5 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primaryDark transition-all mt-4">关闭</button>
-        </div>
-    </div>
-
-    <!-- 系统指南 Modal -->
-    <div id="guide-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
-        <div class="pointer-events-auto w-full max-w-lg bg-white dark:bg-gray-800 rounded-[2rem] p-6 shadow-2xl animate-slide-up ring-1 ring-gray-900/5 max-h-[80vh] overflow-hidden flex flex-col">
-            <div class="flex justify-between items-center mb-4 shrink-0">
-                <h3 class="font-bold text-lg text-gray-800 dark:text-white">系统使用指南</h3>
-                <button onclick="document.getElementById('guide-modal').classList.add('hidden')" class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600"><i class="fa-solid fa-times text-gray-500 dark:text-gray-400"></i></button>
-            </div>
-            <div class="flex-1 overflow-y-auto custom-scroll space-y-3 pr-2">
-                <details class="group bg-gray-50 dark:bg-gray-900/30 rounded-xl p-3 open:bg-white dark:open:bg-gray-700 transition-all">
-                    <summary class="flex justify-between items-center font-bold text-sm text-gray-700 dark:text-gray-200 cursor-pointer list-none"><span><i class="fa-solid fa-user-plus w-6 text-center text-primary"></i> 如何录入客户？</span><i class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform group-open:rotate-180"></i></summary>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 pl-8 leading-relaxed">进入“客户管理”页面，点击右上角的“+”按钮。填写客户姓名、电话、身份证号等基本信息后点击保存。</p>
-                </details>
-                <details class="group bg-gray-50 dark:bg-gray-900/30 rounded-xl p-3 open:bg-white dark:open:bg-gray-700 transition-all">
-                    <summary class="flex justify-between items-center font-bold text-sm text-gray-700 dark:text-gray-200 cursor-pointer list-none"><span><i class="fa-solid fa-file-csv w-6 text-center text-teal-600"></i> 批量导入/导出？</span><i class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform group-open:rotate-180"></i></summary>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 pl-8 leading-relaxed">在“个人中心”->“客户数据中心”进行操作。导入请先下载模板；导出将生成CSV文件。</p>
-                </details>
-                <details class="group bg-gray-50 dark:bg-gray-900/30 rounded-xl p-3 open:bg-white dark:open:bg-gray-700 transition-all">
-                    <summary class="flex justify-between items-center font-bold text-sm text-gray-700 dark:text-gray-200 cursor-pointer list-none"><span><i class="fa-solid fa-money-bill-transfer w-6 text-center text-blue-500"></i> 如何录入业务？</span><i class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform group-open:rotate-180"></i></summary>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 pl-8 leading-relaxed">点击左侧菜单底部的“新增业务”按钮，或在概览页点击“业务流水”卡片。</p>
-                </details>
-                <details class="group bg-gray-50 dark:bg-gray-900/30 rounded-xl p-3 open:bg-white dark:open:bg-gray-700 transition-all">
-                    <summary class="flex justify-between items-center font-bold text-sm text-gray-700 dark:text-gray-200 cursor-pointer list-none"><span><i class="fa-solid fa-comments w-6 text-center text-indigo-500"></i> 如何添加跟进？</span><i class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform group-open:rotate-180"></i></summary>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 pl-8 leading-relaxed">进入“跟进中心”，点击右上角的“写跟进”按钮。</p>
-                </details>
-                <details class="group bg-gray-50 dark:bg-gray-900/30 rounded-xl p-3 open:bg-white dark:open:bg-gray-700 transition-all">
-                    <summary class="flex justify-between items-center font-bold text-sm text-gray-700 dark:text-gray-200 cursor-pointer list-none"><span><i class="fa-regular fa-bell w-6 text-center text-orange-500"></i> 通知规则？</span><i class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform group-open:rotate-180"></i></summary>
-                    <ul class="text-xs text-gray-500 dark:text-gray-400 mt-2 pl-8 leading-relaxed list-disc space-y-1"><li>生日提醒：提前 7 天。</li><li>到期提醒：提前 30 天。</li><li>流失预警：资产>20万且30天未跟进。</li></ul>
-                </details>
-                <details class="group bg-gray-50 dark:bg-gray-900/30 rounded-xl p-3 open:bg-white dark:open:bg-gray-700 transition-all">
-                    <summary class="flex justify-between items-center font-bold text-sm text-gray-700 dark:text-gray-200 cursor-pointer list-none"><span><i class="fa-solid fa-server w-6 text-center text-purple-500"></i> 全量备份？</span><i class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform group-open:rotate-180"></i></summary>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 pl-8 leading-relaxed">在“个人中心” -> “系统数据中心”操作备份与恢复。</p>
-                </details>
-            </div>
-        </div>
-    </div>
-
+    <!-- 脚本 -->
     <script>
-        const STORE_KEY = 'hbc_crm_v9_7_stable';
+        const STORE_KEY = 'hbc_crm_v9_9_enhanced';
         
         let appState = {
             theme: 'default',
@@ -524,7 +472,6 @@
             loginUser(id,pwd) { if(!this.data.users) this.data.users=[]; if(this.data.users.length===0) return {id,name:'管理员'}; return this.data.users.find(u=>u.id===id&&u.pwd===pwd); }
         };
 
-        // 修复2: 强制更新UI颜色，确保所有动态元素同步
         function applyTheme(themeName) {
             document.documentElement.setAttribute('data-theme', themeName);
             appState.theme = themeName;
@@ -559,17 +506,6 @@
             if(btn && circle) {
                 btn.className = `w-12 h-6 rounded-full transition-colors relative ${isDark?'bg-primary':'bg-gray-300'}`;
                 circle.className = `absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${isDark?'translate-x-6':''}`;
-            }
-        }
-
-        function togglePrivacyMode(isPrivate) {
-            appState.privacyMode = isPrivate;
-            db.save();
-            const btn = document.getElementById('pm-toggle-bg');
-            const circle = document.getElementById('pm-toggle-circle');
-            if(btn && circle) {
-                btn.className = `w-12 h-6 rounded-full transition-colors relative ${isPrivate?'bg-primary':'bg-gray-300'}`;
-                circle.className = `absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${isPrivate?'translate-x-6':''}`;
             }
         }
 
@@ -792,7 +728,6 @@
                         <div onclick="renderSubMenu('version')" class="glass-panel p-5 rounded-2xl flex items-center justify-between cursor-pointer hover:border-purple-200 transition-colors">
                             <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center"><i class="fa-solid fa-circle-info"></i></div><span class="font-bold text-gray-700 dark:text-gray-200 text-sm">关于版本</span></div><i class="fa-solid fa-angle-right text-gray-300"></i>
                         </div>
-                        <!-- Fix 5: Manual Logout instead of reload -->
                         <div onclick="manualLogout()" class="glass-panel p-5 rounded-2xl flex items-center justify-between cursor-pointer hover:border-red-200 transition-colors group">
                             <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-900/30 text-red-500 flex items-center justify-center group-hover:bg-red-500 group-hover:text-white transition-colors"><i class="fa-solid fa-power-off"></i></div><span class="font-bold text-red-500 text-sm">安全退出</span></div>
                         </div>
@@ -802,15 +737,13 @@
              `;
         }
 
-        // Fix 5: Manual Logout Function
         function manualLogout() {
             if(confirm('确定要退出登录吗？')){
                 db.data.currentUser = null;
                 db.save();
                 document.getElementById('app-container').classList.add('hidden');
                 document.getElementById('login-page').style.display = 'flex';
-                document.getElementById('auth-pwd').value = ''; // Clear password for safety
-                // Reset router state
+                document.getElementById('auth-pwd').value = ''; 
                 router.currentPage = 'login'; 
             }
         }
@@ -848,7 +781,6 @@
                     </div>
                 `;
             } else if (type === 'sysData') {
-                // Fix 3: Restore functionality by calling functions defined globally
                 content = `
                     ${header('系统数据中心')}
                     <div class="space-y-3">
@@ -857,13 +789,21 @@
                     </div>
                 `;
             } else if (type === 'custData') {
-                // Fix 3: Restore functionality
                 content = `
                     ${header('客户数据中心')}
-                    <div class="space-y-3">
-                        <div onclick="downloadTemplate()" class="glass-panel p-5 rounded-2xl flex items-center gap-4 cursor-pointer hover:border-indigo-200"><div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-file-csv"></i></div><div><h4 class="font-bold text-gray-800 dark:text-white text-sm">下载导入模板</h4><p class="text-xs text-gray-500 mt-0.5">获取标准 CSV 格式模板</p></div></div>
-                        <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 cursor-pointer hover:border-teal-200 relative"><div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center"><i class="fa-solid fa-upload"></i></div><div><h4 class="font-bold text-gray-800 dark:text-white text-sm">批量导入客户</h4><p class="text-xs text-gray-500 mt-0.5">上传 CSV 文件批量添加</p></div><input type="file" onchange="handleFileImport(this)" class="absolute inset-0 opacity-0 cursor-pointer" accept=".csv"></div>
-                        <div onclick="exportCustomers()" class="glass-panel p-5 rounded-2xl flex items-center gap-4 cursor-pointer hover:border-pink-200"><div class="w-10 h-10 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center"><i class="fa-solid fa-download"></i></div><div><h4 class="font-bold text-gray-800 dark:text-white text-sm">批量导出客户</h4><p class="text-xs text-gray-500 mt-0.5">导出所有客户资料为 CSV</p></div></div>
+                    <div class="space-y-6">
+                        <div class="space-y-3">
+                            <h4 class="text-xs font-bold text-gray-400 uppercase ml-2">客户档案管理</h4>
+                            <div onclick="downloadTemplate()" class="glass-panel p-5 rounded-2xl flex items-center gap-4 cursor-pointer hover:border-indigo-200"><div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-file-csv"></i></div><div><h4 class="font-bold text-gray-800 dark:text-white text-sm">下载客户导入模板</h4><p class="text-xs text-gray-500 mt-0.5">获取客户档案标准 CSV 模板</p></div></div>
+                            <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 cursor-pointer hover:border-teal-200 relative"><div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center"><i class="fa-solid fa-upload"></i></div><div><h4 class="font-bold text-gray-800 dark:text-white text-sm">批量导入客户</h4><p class="text-xs text-gray-500 mt-0.5">上传 CSV 文件批量添加</p></div><input type="file" onchange="handleFileImport(this)" class="absolute inset-0 opacity-0 cursor-pointer" accept=".csv"></div>
+                            <div onclick="exportCustomers()" class="glass-panel p-5 rounded-2xl flex items-center gap-4 cursor-pointer hover:border-pink-200"><div class="w-10 h-10 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center"><i class="fa-solid fa-download"></i></div><div><h4 class="font-bold text-gray-800 dark:text-white text-sm">批量导出客户</h4><p class="text-xs text-gray-500 mt-0.5">导出所有客户资料为 CSV</p></div></div>
+                        </div>
+                        <div class="space-y-3">
+                            <h4 class="text-xs font-bold text-gray-400 uppercase ml-2">业务流水管理</h4>
+                             <div onclick="downloadTransactionTemplate()" class="glass-panel p-5 rounded-2xl flex items-center gap-4 cursor-pointer hover:border-blue-200"><div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-file-invoice-dollar"></i></div><div><h4 class="font-bold text-gray-800 dark:text-white text-sm">下载业务导入模板</h4><p class="text-xs text-gray-500 mt-0.5">含姓名、客户号、金额、类型等</p></div></div>
+                             <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 cursor-pointer hover:border-emerald-200 relative"><div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-file-import"></i></div><div><h4 class="font-bold text-gray-800 dark:text-white text-sm">批量导入业务</h4><p class="text-xs text-gray-500 mt-0.5">上传 CSV 自动匹配客户</p></div><input type="file" onchange="handleTransactionImport(this)" class="absolute inset-0 opacity-0 cursor-pointer" accept=".csv"></div>
+                             <div onclick="exportTransactionsBatch()" class="glass-panel p-5 rounded-2xl flex items-center gap-4 cursor-pointer hover:border-purple-200"><div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center"><i class="fa-solid fa-file-export"></i></div><div><h4 class="font-bold text-gray-800 dark:text-white text-sm">批量导出业务</h4><p class="text-xs text-gray-500 mt-0.5">导出全量业务流水记录</p></div></div>
+                        </div>
                     </div>
                 `;
             } else if (type === 'guide') {
@@ -882,12 +822,13 @@
                     ${header('关于版本')}
                     <div class="space-y-3">
                         <div class="glass-panel p-5 rounded-2xl">
-                            <h3 class="font-bold text-gray-800 dark:text-white mb-3">V9.7 Stable 更新日志</h3>
+                            <h3 class="font-bold text-gray-800 dark:text-white mb-3">V9.9 Enhanced 更新日志</h3>
                             <ul class="text-xs text-gray-600 dark:text-gray-300 space-y-2 list-disc pl-4">
-                                <li><b>修复</b>：彻底修复UI白块问题，优化顶部栏透明度。</li>
-                                <li><b>修复</b>：修复隐私模式下资产显示为代码的BUG。</li>
-                                <li><b>优化</b>：数据导入/导出逻辑优化，导入后自动刷新。</li>
-                                <li><b>优化</b>：修复安全退出在部分环境下无效的问题。</li>
+                                <li><b>新增</b>：客户数据中心新增业务流水批量导入/导出功能。</li>
+                                <li><b>新增</b>：支持按客户号或姓名自动匹配导入业务数据。</li>
+                                <li><b>优化</b>：客户搜索框升级为胶囊样式（Rounded-Full）。</li>
+                                <li><b>优化</b>：跟进中心筛选框升级为胶囊样式（Rounded-Full）。</li>
+                                <li><b>修复</b>：数据导入后自动刷新资产计算逻辑。</li>
                             </ul>
                         </div>
                         <div class="text-center text-[10px] text-gray-400 mt-4">著作权人：黄修宇</div>
@@ -902,45 +843,20 @@
             document.getElementById('mine-root').classList.remove('hidden');
         }
 
-        function updateThemeSelectionUI() {
-            const themes = ['default', 'pink', 'blue'];
-            themes.forEach(t => {
-                const el = document.getElementById(`theme-opt-${t}`);
-                if(el) {
-                    if(appState.theme === t) {
-                        el.className = `cursor-pointer flex flex-col items-center gap-2 p-3 rounded-xl border border-${t==='default'?'emerald':t}-500 bg-${t==='default'?'emerald':t}-50 dark:bg-${t==='default'?'emerald':t}-900/30`;
-                    } else {
-                        el.className = `cursor-pointer flex flex-col items-center gap-2 p-3 rounded-xl border border-transparent bg-gray-50 dark:bg-gray-800`;
-                    }
-                }
-            });
-        }
-
-        function togglePrivacyMode(isPrivate) {
-            appState.privacyMode = isPrivate;
-            db.save();
-            const btn = document.getElementById('pm-toggle-bg');
-            const circle = document.getElementById('pm-toggle-circle');
-            if(btn && circle) {
-                btn.className = `w-12 h-6 rounded-full transition-colors relative ${isPrivate?'bg-primary':'bg-gray-300'}`;
-                circle.className = `absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${isPrivate?'translate-x-6':''}`;
-            }
-        }
-
         let fuFilterDate = '';
         let fuFilterName = '';
 
         function renderFollowupsPage(container) {
-            // Fix 2: Removed bg-white/50 to fix white block, used glass effect correctly
+            // Update: Inputs are now rounded-full (胶囊框)
             container.innerHTML = `
                 <div class="max-w-4xl mx-auto h-full flex flex-col">
                     <div class="flex flex-col md:flex-row gap-3 mb-6 sticky top-0 z-10 py-2 -mx-4 px-4 backdrop-blur-xl">
                          <div class="flex gap-2 flex-1">
-                             <input type="date" value="${fuFilterDate}" onchange="updateFuFilter('date', this.value)" class="glass-panel px-3 py-2 rounded-xl text-sm text-gray-600 dark:text-gray-300 outline-none w-full md:w-auto bg-white/10 dark:bg-gray-800/10" placeholder="按日期筛选">
-                             <input type="text" value="${fuFilterName}" oninput="updateFuFilter('name', this.value)" class="glass-panel px-3 py-2 rounded-xl text-sm text-gray-600 dark:text-gray-300 outline-none w-full bg-white/10 dark:bg-gray-800/10" placeholder="输入客户姓名筛选...">
+                             <input type="date" value="${fuFilterDate}" onchange="updateFuFilter('date', this.value)" class="glass-panel px-4 py-2 rounded-full text-sm text-gray-600 dark:text-gray-300 outline-none w-full md:w-auto bg-white/10 dark:bg-gray-800/10" placeholder="按日期筛选">
+                             <input type="text" value="${fuFilterName}" oninput="updateFuFilter('name', this.value)" class="glass-panel px-4 py-2 rounded-full text-sm text-gray-600 dark:text-gray-300 outline-none w-full bg-white/10 dark:bg-gray-800/10" placeholder="输入客户姓名筛选...">
                          </div>
                         <div class="relative">
-                            <button onclick="document.getElementById('fu-export-menu').classList.toggle('hidden')" class="bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 px-4 py-2.5 rounded-xl text-sm font-bold shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-all flex items-center gap-2 h-full">
+                            <button onclick="document.getElementById('fu-export-menu').classList.toggle('hidden')" class="bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 px-4 py-2.5 rounded-full text-sm font-bold shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-all flex items-center gap-2 h-full">
                                 <i class="fa-solid fa-file-export"></i> 导出
                             </button>
                             <div id="fu-export-menu" class="hidden absolute right-0 top-12 w-40 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-20 animate-slide-up">
@@ -950,7 +866,7 @@
                                 <button onclick="exportFollowups('all')" class="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 text-xs font-bold text-gray-700 dark:text-gray-300">导出全部</button>
                             </div>
                         </div>
-                        <button onclick="showFollowupModal()" class="bg-primary text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg hover:bg-primaryDark transition-all flex items-center justify-center gap-2 shrink-0">
+                        <button onclick="showFollowupModal()" class="bg-primary text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-lg hover:bg-primaryDark transition-all flex items-center justify-center gap-2 shrink-0">
                             <i class="fa-solid fa-plus"></i> 写跟进
                         </button>
                     </div>
@@ -960,11 +876,15 @@
             renderFollowupsList(); 
         }
 
-        // --- Global Tools Definition (Fix 3) ---
+        // --- Global Tools Definition ---
         function exportFollowups(range){const today=new Date();let filtered=db.data.followups;if(range==='today'){const dateStr=today.toISOString().split('T')[0];filtered=filtered.filter(f=>f.date.startsWith(dateStr));}else if(range==='week'){const limit=new Date();limit.setDate(today.getDate()-7);filtered=filtered.filter(f=>new Date(f.date)>=limit);}else if(range==='month'){const limit=new Date();limit.setDate(today.getDate()-30);filtered=filtered.filter(f=>new Date(f.date)>=limit);}let csvContent="\ufeff姓名,时间,跟进内容\n";filtered.forEach(f=>{const cust=db.data.customers.find(c=>c.id===f.custId)||{name:'未知客户'};const content=f.content.replace(/"/g,'""');csvContent+=`${cust.name},${f.date},"${content}"\n`;});const blob=new Blob([csvContent],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const link=document.createElement("a");link.href=url;link.download=`跟进记录_${range}_${new Date().toISOString().slice(0,10)}.csv`;document.body.appendChild(link);link.click();document.body.removeChild(link);document.getElementById('fu-export-menu').classList.add('hidden');}
         function renderFollowupsList(){const listContainer=document.getElementById('followup-list-container');if(!listContainer)return;const filteredFus=db.data.followups.filter(f=>{const cust=db.data.customers.find(c=>c.id===f.custId)||{name:''};const matchDate=fuFilterDate?f.date.startsWith(fuFilterDate):true;const matchName=fuFilterName?cust.name.includes(fuFilterName):true;return matchDate&&matchName;}).sort((a,b)=>new Date(b.date)-new Date(a.date));if(filteredFus.length===0){listContainer.innerHTML=`<div class="text-center py-10 opacity-50 flex flex-col items-center"><i class="fa-solid fa-filter-circle-xmark text-3xl mb-2"></i>暂无匹配记录</div>`;return;}listContainer.innerHTML=`<div class="relative pl-4 md:pl-8 space-y-8 pb-12"><div class="absolute left-[23px] md:left-[39px] top-4 bottom-0 w-[2px] bg-gradient-to-b from-gray-200 to-transparent"></div>${filteredFus.map((f,i)=>{const cust=db.data.customers.find(c=>c.id===f.custId)||{name:'未知客户'};let typeIcon='fa-phone',typeColor='bg-blue-100 text-blue-600';if(f.type.includes('微信')){typeIcon='fa-comments';typeColor='bg-green-100 text-green-600';}if(f.type.includes('上门')||f.type.includes('网点')){typeIcon='fa-building';typeColor='bg-orange-100 text-orange-600';}return`<div class="relative flex gap-4 md:gap-6 animate-slide-up stagger-${i%5+1}"><div class="z-10 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-4 border-gray-200 dark:border-gray-700 mt-5 shadow-sm shrink-0"></div><div class="flex-1 glass-panel p-5 rounded-[1.5rem] hover:border-primary/30 transition-all group"><div class="flex justify-between items-start mb-3"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full ${typeColor} flex items-center justify-center text-sm shadow-inner shrink-0"><i class="fa-solid ${typeIcon}"></i></div><div><h4 class="font-bold text-gray-800 dark:text-white text-sm md:text-base">${PrivacyUtils.maskName(cust.name)}</h4><p class="text-xs text-gray-400 font-mono">${f.date}</p></div></div><span class="text-[10px] bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 px-2 py-1 rounded-lg text-gray-500 dark:text-gray-300 font-bold shrink-0">${f.type}</span></div><div class="pl-[52px]"><p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed bg-white/50 dark:bg-gray-900/50 p-3 rounded-xl border border-white/60 dark:border-gray-700/50">${f.content}</p></div></div></div>`;}).join('')}</div>`;}
         function updateFuFilter(t,v){if(t==='date')fuFilterDate=v;if(t==='name')fuFilterName=v;renderFollowupsList();}
-        function renderCustomers(c){c.innerHTML=`<div class="h-full flex flex-col max-w-5xl mx-auto w-full"><div class="sticky top-0 z-20 py-2 -mx-4 px-4 backdrop-blur-xl"><div class="glass-panel p-2 pl-3 md:pl-4 rounded-2xl flex items-center gap-2 shadow-sm focus-within:ring-2 ring-emerald-100 dark:ring-emerald-900 transition-all bg-white/10 dark:bg-gray-800/10"><i class="fa-solid fa-search text-gray-400"></i><input type="text" oninput="filterCust(this.value)" placeholder="姓名 / 客户号" class="flex-1 min-w-0 py-2.5 outline-none text-sm bg-transparent dark:text-white"><button onclick="openAddCustomerModal()" class="bg-gray-900 dark:bg-black text-white w-10 h-10 shrink-0 rounded-xl flex items-center justify-center hover:bg-black dark:hover:bg-gray-900 transition-all shadow-lg"><i class="fa-solid fa-user-plus"></i></button></div></div><div id="customer-list" class="space-y-3 pb-20 px-1"></div></div>`;filterCust('');}
+        
+        function renderCustomers(c){
+            // Update: Search box is now rounded-full (胶囊框)
+            c.innerHTML=`<div class="h-full flex flex-col max-w-5xl mx-auto w-full"><div class="sticky top-0 z-20 py-2 -mx-4 px-4 backdrop-blur-xl"><div class="glass-panel p-2 pl-3 md:pl-4 rounded-full flex items-center gap-2 shadow-sm focus-within:ring-2 ring-emerald-100 dark:ring-emerald-900 transition-all bg-white/10 dark:bg-gray-800/10"><i class="fa-solid fa-search text-gray-400"></i><input type="text" oninput="filterCust(this.value)" placeholder="姓名 / 客户号" class="flex-1 min-w-0 py-2.5 outline-none text-sm bg-transparent dark:text-white"><button onclick="openAddCustomerModal()" class="bg-gray-900 dark:bg-black text-white w-10 h-10 shrink-0 rounded-full flex items-center justify-center hover:bg-black dark:hover:bg-gray-900 transition-all shadow-lg"><i class="fa-solid fa-user-plus"></i></button></div></div><div id="customer-list" class="space-y-3 pb-20 px-1"></div></div>`;filterCust('');
+        }
         function filterCust(q){const list=document.getElementById('customer-list');if(!list)return;const res=db.data.customers.filter(c=>c.name.includes(q)||c.phone.includes(q)||c.custNo.includes(q));list.innerHTML=res.map((c,i)=>{const a=c.assets||0;let l='text-gray-300';if(a>=500000)l='text-purple-500 fa-gem';else if(a>=200000)l='text-blue-500 fa-certificate';else if(a>=50000)l='text-amber-500 fa-crown';const avatarBg=c.gender==='男'?'bg-blue-50 text-blue-500':'bg-red-50 text-red-500';return`<div onclick="showDetail('${c.id}')" class="glass-panel p-4 rounded-2xl flex items-center justify-between cursor-pointer animate-slide-up stagger-${i%5+1}"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-full ${avatarBg} flex items-center justify-center font-bold text-lg shrink-0">${c.name[0]}</div><div class="min-w-0"><h4 class="font-bold text-gray-800 dark:text-white text-sm truncate">${PrivacyUtils.maskName(c.name)} <i class="fa-solid ${l} text-xs"></i></h4><p class="text-xs text-gray-400 mt-0.5 font-mono truncate">${PrivacyUtils.maskCustNo(c.custNo)||'-'}</p></div></div><div class="text-right shrink-0"><p class="text-sm font-bold text-gray-800 dark:text-white font-mono">${PrivacyUtils.maskMoney(a)}</p></div></div>`;}).join('');if(res.length===0)list.innerHTML=`<div class="text-center py-20 text-gray-400 text-sm">无匹配结果</div>`;}
         let txFilterType='all';let txStartDate='';let txEndDate='';
         function renderTransactions(c){let txs=[...db.data.transactions];const today=new Date();if(txFilterType==='month'){const limit=new Date();limit.setDate(today.getDate()-30);txs=txs.filter(t=>new Date(t.date)>=limit);}else if(txFilterType==='week'){const limit=new Date();limit.setDate(today.getDate()-7);txs=txs.filter(t=>new Date(t.date)>=limit);}else if(txFilterType==='range'){if(txStartDate)txs=txs.filter(t=>t.date>=txStartDate);if(txEndDate)txs=txs.filter(t=>t.date<=txEndDate);}txs=txs.sort((a,b)=>new Date(b.date)-new Date(a.date));c.innerHTML=`<div class="max-w-5xl mx-auto space-y-4"><div class="glass-panel p-3 rounded-2xl flex flex-col md:flex-row justify-between items-center sticky top-0 z-10 mb-4 bg-white/80 dark:bg-gray-800/80 gap-3"><div class="flex items-center gap-2 overflow-x-auto no-scrollbar w-full md:w-auto"><button onclick="setTxFilter('all')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${txFilterType==='all'?'bg-gray-900 text-white dark:bg-white dark:text-gray-900':'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-300'}">全部</button><button onclick="setTxFilter('week')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${txFilterType==='week'?'bg-gray-900 text-white dark:bg-white dark:text-gray-900':'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-300'}">近一周</button><button onclick="setTxFilter('month')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${txFilterType==='month'?'bg-gray-900 text-white dark:bg-white dark:text-gray-900':'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-300'}">近一月</button></div><div class="flex items-center gap-2 w-full md:w-auto bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1.5 focus-within:ring-1 focus-within:ring-primary ${txFilterType==='range'?'bg-white border-primary':''}"><input type="date" value="${txStartDate}" onchange="setTxRange('start', this.value)" class="bg-transparent text-xs outline-none text-gray-600 dark:text-gray-300 w-24"><span class="text-gray-400">-</span><input type="date" value="${txEndDate}" onchange="setTxRange('end', this.value)" class="bg-transparent text-xs outline-none text-gray-600 dark:text-gray-300 w-24"></div></div>${txs.length===0?`<div class="text-center py-10 opacity-50"><p>暂无流水记录</p></div>`:txs.map((t,i)=>{const u=db.data.customers.find(x=>x.id===t.custId);return`<div class="glass-panel p-5 rounded-2xl flex justify-between items-center animate-slide-up stagger-${i%5+1}"><div><h4 class="font-bold text-gray-800 dark:text-white text-sm">${t.type}</h4><div class="flex items-center gap-2 mt-1"><span class="text-xs text-gray-400">${t.date}</span><span class="text-xs text-primary bg-primary/10 px-1.5 rounded">${PrivacyUtils.maskName(u?u.name:'Unknown')}</span></div></div><span class="font-bold text-gray-800 dark:text-white font-mono">+${PrivacyUtils.maskMoney(t.amount)}</span></div>`}).join('')}</div>`;}
@@ -988,10 +908,11 @@
         function showDeleteConfirm(){if(!currentDetailCustomerId)return;document.getElementById('confirm-modal').classList.remove('hidden');}
         function executeDelete(){if(!currentDetailCustomerId)return;db.deleteCustomer(currentDetailCustomerId);closeAllModals();closeConfirmModal();router.navigate('customers');}
         
-        // Fix 1: InnerHTML for Privacy Mode
         function showDetail(id){currentDetailCustomerId=id;const c=db.data.customers.find(x=>x.id===id);if(!c)return;document.getElementById('customer-detail-modal').classList.remove('hidden');document.getElementById('detail-name').innerText=c.name;const avatarDiv=document.getElementById('detail-avatar');avatarDiv.className=`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold shadow-inner border border-white dark:border-gray-700 ${c.gender==='男'?'bg-blue-50 text-blue-500':'bg-red-50 text-red-500'}`;avatarDiv.innerText=c.name[0];document.getElementById('detail-id').innerText=PrivacyUtils.maskCustNo(c.custNo)||'无编号';document.getElementById('detail-assets').innerHTML=PrivacyUtils.maskMoney(c.assets);document.getElementById('detail-basic-info').innerHTML=`<div><span class="text-gray-400 block text-xs mb-1">手机号码</span>${PrivacyUtils.maskPhone(c.phone)}</div><div><span class="text-gray-400 block text-xs mb-1">身份证号</span>${PrivacyUtils.maskID(c.idcard)||'-'}</div><div><span class="text-gray-400 block text-xs mb-1">来源渠道</span>${c.source}</div><div><span class="text-gray-400 block text-xs mb-1">性别</span>${c.gender}</div>`;document.getElementById('detail-tx-list').innerHTML=db.data.transactions.filter(t=>t.custId===id).map(t=>`<div class="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-xl text-sm flex justify-between dark:text-gray-300"><span>${t.type}</span><span class="font-bold">+${PrivacyUtils.maskMoney(t.amount)}</span></div>`).join('');document.getElementById('detail-fu-list').innerHTML=db.data.followups.filter(f=>f.custId===id).map(f=>`<div class="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-xl text-sm dark:text-gray-300"><span class="font-bold text-gray-700 dark:text-white">${f.type}</span> <span class="text-xs text-gray-400">${f.date}</span><p class="text-gray-600 dark:text-gray-400 mt-1">${f.content}</p></div>`).join('');}
         
-        // Fix 3: Import Data Hot-Reload
+        // --- 批量导入导出逻辑 ---
+
+        // 1. 客户导入
         function handleFileImport(input) {
             const file = input.files[0];
             if (!file) return;
@@ -1019,6 +940,54 @@
             reader.readAsText(file);
         }
 
+        // 2. 业务导入 (New)
+        function handleTransactionImport(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const rows = text.split(/\r?\n/);
+                let success = 0; let fail = 0;
+                // Header: 姓名,客户号,业务日期,业务类型,业务金额
+                for (let i = 1; i < rows.length; i++) {
+                    const row = rows[i].trim(); if (!row) continue;
+                    const cols = row.split(','); 
+                    if (cols.length < 5) { fail++; continue; }
+                    
+                    const name = cols[0].trim();
+                    const custNo = cols[1].trim();
+                    const date = cols[2].trim();
+                    const type = cols[3].trim();
+                    const amountStr = cols[4].trim();
+                    
+                    // Match Customer: Prefer CustNo, then Name
+                    let customer = null;
+                    if(custNo) customer = db.data.customers.find(c => c.custNo === custNo);
+                    if(!customer && name) customer = db.data.customers.find(c => c.name === name);
+                    
+                    if(customer) {
+                        const amount = parseFloat(amountStr);
+                        if(!isNaN(amount)) {
+                             db.addTransaction({
+                                 amount: amount,
+                                 type: type,
+                                 date: date,
+                                 remark: '批量导入',
+                                 custId: customer.id
+                             });
+                             success++;
+                        } else { fail++; }
+                    } else {
+                        fail++; // No customer matched
+                    }
+                }
+                alert(`业务导入完成！成功关联：${success} 条，失败/未匹配：${fail} 条`);
+                input.value = '';
+            };
+            reader.readAsText(file);
+        }
+
         function downloadTemplate() {
             const header = "姓名,联系电话,身份证号,客户号\n";
             const example = "张三,13800138000,420102199001011234,C10001\n李四,13900139000,420102199505055678,C10002";
@@ -1032,6 +1001,19 @@
             document.body.removeChild(link);
         }
 
+        function downloadTransactionTemplate() {
+            const header = "客户姓名,客户号,业务日期(YYYY-MM-DD),业务类型,业务金额(元)\n";
+            const example = "张三,C10001,2025-10-01,一年定期,50000\n李四,C10002,2025-10-05,自营理财,100000";
+            const blob = new Blob(["\ufeff" + header + example], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "业务流水导入模板.csv";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
         function exportCustomers() {
             const csvContent = "\ufeff姓名,性别,电话,身份证号,客户号,资产(元),来源\n" + 
                 db.data.customers.map(c => `${c.name},${c.gender},${c.phone},${c.idcard||''},${c.custNo||''},${c.assets},${c.source}`).join('\n');
@@ -1040,6 +1022,22 @@
             const link = document.createElement("a");
             link.href = url;
             link.download = `客户资料导出_${new Date().toISOString().slice(0,10)}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportTransactionsBatch() {
+            const csvContent = "\ufeff业务ID,客户姓名,客户号,业务类型,金额(元),日期,备注\n" + 
+                db.data.transactions.map(t => {
+                    const c = db.data.customers.find(x => x.id === t.custId) || {name:'未知',custNo:''};
+                    return `${t.id},${c.name},${c.custNo||''},${t.type},${t.amount},${t.date},${t.remark||''}`;
+                }).join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `业务流水导出_${new Date().toISOString().slice(0,10)}.csv`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -1068,10 +1066,9 @@
                     db.data = JSON.parse(e.target.result); 
                     db.save(); 
                     alert('数据恢复成功'); 
-                    // Hot Reload UI
                     if(appState.theme) applyTheme(appState.theme);
                     if(appState.darkMode) applyDarkMode(true);
-                    renderMine(document.getElementById('content-area')); // re-render
+                    renderMine(document.getElementById('content-area')); 
                 } catch(err) { alert('文件格式错误'); }
             };
             reader.readAsText(file);
